@@ -1,16 +1,29 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 
-type JobStatus = "Applied" | "Interview" | "Rejected" | "Offer" | "Follow-up";
+const jobStatuses = ["Applied", "Interview", "Rejected", "Offer", "Follow-up"] as const;
 
-type Application = {
+const applicationSchema = z.object({
+  company: z.string().min(2, "Company name is required"),
+  role: z.string().min(2, "Role is required"),
+  location: z.string().min(2, "Location is required"),
+  status: z.enum(jobStatuses, {
+    message: "Select a valid status",
+  }),
+  appliedOn: z.string().min(1, "Applied date is required"),
+  notes: z.string().optional(),
+});
+
+type ApplicationFormValues = z.infer<typeof applicationSchema>;
+
+type JobStatus = (typeof jobStatuses)[number];
+
+type Application = ApplicationFormValues & {
   id: number;
-  company: string;
-  role: string;
-  status: JobStatus;
-  location: string;
-  appliedOn: string;
 };
 
 const initialApplications: Application[] = [
@@ -21,6 +34,7 @@ const initialApplications: Application[] = [
     status: "Interview",
     location: "Remote",
     appliedOn: "2026-05-18",
+    notes: "Initial recruiter screening done.",
   },
   {
     id: 2,
@@ -29,6 +43,7 @@ const initialApplications: Application[] = [
     status: "Applied",
     location: "Remote",
     appliedOn: "2026-05-21",
+    notes: "Applied through careers page.",
   },
   {
     id: 3,
@@ -37,6 +52,7 @@ const initialApplications: Application[] = [
     status: "Follow-up",
     location: "Remote",
     appliedOn: "2026-05-24",
+    notes: "Sent follow-up email.",
   },
 ];
 
@@ -49,7 +65,25 @@ const statusStyles: Record<JobStatus, string> = {
 };
 
 export default function ApplicationsPage() {
-  const [applications] = useState<Application[]>(initialApplications);
+  const [applications, setApplications] = useState<Application[]>(initialApplications);
+  const [showForm, setShowForm] = useState(false);
+
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors, isSubmitting },
+  } = useForm<ApplicationFormValues>({
+    resolver: zodResolver(applicationSchema),
+    defaultValues: {
+      company: "",
+      role: "",
+      location: "",
+      status: "Applied",
+      appliedOn: "",
+      notes: "",
+    },
+  });
 
   const stats = useMemo(() => {
     return {
@@ -59,6 +93,18 @@ export default function ApplicationsPage() {
       offer: applications.filter((a) => a.status === "Offer").length,
     };
   }, [applications]);
+
+  const onSubmit = (data: ApplicationFormValues) => {
+    const newApplication: Application = {
+      id: Date.now(),
+      ...data,
+      notes: data.notes || "",
+    };
+
+    setApplications((prev) => [newApplication, ...prev]);
+    reset();
+    setShowForm(false);
+  };
 
   return (
     <div className="space-y-6">
@@ -70,8 +116,11 @@ export default function ApplicationsPage() {
           </p>
         </div>
 
-        <button className="rounded-lg bg-white px-4 py-2 text-sm font-medium text-zinc-900 transition hover:bg-zinc-200">
-          + Add Application
+        <button
+          onClick={() => setShowForm((prev) => !prev)}
+          className="rounded-lg bg-white px-4 py-2 text-sm font-medium text-zinc-900 transition hover:bg-zinc-200"
+        >
+          {showForm ? "Close Form" : "+ Add Application"}
         </button>
       </div>
 
@@ -93,6 +142,109 @@ export default function ApplicationsPage() {
           <p className="mt-2 text-3xl font-semibold">{stats.offer}</p>
         </div>
       </section>
+
+      {showForm && (
+        <section className="rounded-2xl border border-zinc-800 bg-zinc-900 p-5">
+          <h2 className="text-lg font-medium">Add New Application</h2>
+
+          <form onSubmit={handleSubmit(onSubmit)} className="mt-5 grid gap-4 md:grid-cols-2">
+            <div>
+              <label className="mb-2 block text-sm text-zinc-300">Company</label>
+              <input
+                {...register("company")}
+                className="w-full rounded-lg border border-zinc-700 bg-zinc-950 px-4 py-2 text-white outline-none focus:border-white"
+                placeholder="Google"
+              />
+              {errors.company && (
+                <p className="mt-1 text-sm text-red-400">{errors.company.message}</p>
+              )}
+            </div>
+
+            <div>
+              <label className="mb-2 block text-sm text-zinc-300">Role</label>
+              <input
+                {...register("role")}
+                className="w-full rounded-lg border border-zinc-700 bg-zinc-950 px-4 py-2 text-white outline-none focus:border-white"
+                placeholder="Software Engineer"
+              />
+              {errors.role && (
+                <p className="mt-1 text-sm text-red-400">{errors.role.message}</p>
+              )}
+            </div>
+
+            <div>
+              <label className="mb-2 block text-sm text-zinc-300">Location</label>
+              <input
+                {...register("location")}
+                className="w-full rounded-lg border border-zinc-700 bg-zinc-950 px-4 py-2 text-white outline-none focus:border-white"
+                placeholder="Remote"
+              />
+              {errors.location && (
+                <p className="mt-1 text-sm text-red-400">{errors.location.message}</p>
+              )}
+            </div>
+
+            <div>
+              <label className="mb-2 block text-sm text-zinc-300">Status</label>
+              <select
+                {...register("status")}
+                className="w-full rounded-lg border border-zinc-700 bg-zinc-950 px-4 py-2 text-white outline-none focus:border-white"
+              >
+                {jobStatuses.map((status) => (
+                  <option key={status} value={status}>
+                    {status}
+                  </option>
+                ))}
+              </select>
+              {errors.status && (
+                <p className="mt-1 text-sm text-red-400">{errors.status.message}</p>
+              )}
+            </div>
+
+            <div>
+              <label className="mb-2 block text-sm text-zinc-300">Applied On</label>
+              <input
+                type="date"
+                {...register("appliedOn")}
+                className="w-full rounded-lg border border-zinc-700 bg-zinc-950 px-4 py-2 text-white outline-none focus:border-white"
+              />
+              {errors.appliedOn && (
+                <p className="mt-1 text-sm text-red-400">{errors.appliedOn.message}</p>
+              )}
+            </div>
+
+            <div className="md:col-span-2">
+              <label className="mb-2 block text-sm text-zinc-300">Notes</label>
+              <textarea
+                {...register("notes")}
+                rows={4}
+                className="w-full rounded-lg border border-zinc-700 bg-zinc-950 px-4 py-2 text-white outline-none focus:border-white"
+                placeholder="Recruiter contact, interview notes, follow-up details..."
+              />
+            </div>
+
+            <div className="md:col-span-2 flex gap-3">
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className="rounded-lg bg-white px-4 py-2 text-sm font-medium text-zinc-900 transition hover:bg-zinc-200 disabled:cursor-not-allowed disabled:opacity-60"
+              >
+                {isSubmitting ? "Saving..." : "Save Application"}
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  reset();
+                  setShowForm(false);
+                }}
+                className="rounded-lg border border-zinc-700 px-4 py-2 text-sm text-zinc-300 hover:bg-zinc-800"
+              >
+                Cancel
+              </button>
+            </div>
+          </form>
+        </section>
+      )}
 
       <section className="rounded-2xl border border-zinc-800 bg-zinc-900">
         <div className="border-b border-zinc-800 px-5 py-4">
@@ -119,7 +271,7 @@ export default function ApplicationsPage() {
                   Applied On
                 </th>
                 <th className="px-5 py-3 text-left text-xs font-medium uppercase tracking-wider text-zinc-400">
-                  Action
+                  Notes
                 </th>
               </tr>
             </thead>
@@ -139,10 +291,8 @@ export default function ApplicationsPage() {
                   </td>
                   <td className="px-5 py-4 text-sm text-zinc-300">{app.location}</td>
                   <td className="px-5 py-4 text-sm text-zinc-300">{app.appliedOn}</td>
-                  <td className="px-5 py-4 text-sm">
-                    <button className="text-zinc-400 transition hover:text-white">
-                      View
-                    </button>
+                  <td className="px-5 py-4 text-sm text-zinc-400">
+                    {app.notes || "-"}
                   </td>
                 </tr>
               ))}
