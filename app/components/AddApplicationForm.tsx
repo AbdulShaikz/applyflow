@@ -114,7 +114,7 @@ export default function AddApplicationForm({
       <button
         type="submit"
         disabled={isSubmitting}
-        className="w-full rounded-lg bg-white py-2 text-sm font-medium text-zinc-900 hover:bg-zinc-200 disabled:opacity-50"
+        className="w-full rounded-lg bg-white py-2 text-sm font-medium text-zinc-900 hover:bg-zinc-200 disabled:opacity-50 cursor-pointer"
       >
         {isSubmitting ? "Adding..." : "Add Application"}
       </button>
