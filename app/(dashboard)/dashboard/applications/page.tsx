@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import AddApplicationForm from "@/app/components/AddApplicationForm";
 
 type Application = {
   id: string;
@@ -15,6 +17,7 @@ type Application = {
 export default function ApplicationsPage() {
   const [applications, setApplications] = useState<Application[]>([]);
   const [loading, setLoading] = useState(true);
+  const [open, setOpen] = useState(false);
 
   async function fetchApplications() {
     const res = await fetch("/api/applications");
@@ -36,10 +39,30 @@ export default function ApplicationsPage() {
             Track every job application in one place.
           </p>
         </div>
-        <button className="rounded-lg bg-white px-4 py-2 text-sm font-medium text-zinc-900 hover:bg-zinc-200">
+        <button
+          onClick={() => setOpen(true)}
+          className="rounded-lg bg-white px-4 py-2 text-sm font-medium text-zinc-900 hover:bg-zinc-200"
+        >
           + Add Application
         </button>
       </div>
+
+      <Dialog open={open} onOpenChange={setOpen}>
+        <DialogContent 
+          className="bg-zinc-900 border-zinc-800 text-zinc-100 sm:max-w-lg max-h-[90vh] overflow-y-auto"
+          onInteractOutside={(e) => e.preventDefault()}
+        >
+          <DialogHeader>
+            <DialogTitle>Add Application</DialogTitle>
+          </DialogHeader>
+          <AddApplicationForm
+            onSuccess={() => {
+              setOpen(false);
+              fetchApplications();
+            }}
+          />
+        </DialogContent>
+      </Dialog>
 
       {loading ? (
         <p className="text-sm text-zinc-400">Loading...</p>
