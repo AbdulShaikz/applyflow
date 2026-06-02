@@ -78,7 +78,7 @@ export default function ApplicationsPage() {
           No applications yet. Add your first one.
         </div>
       ) : (
-        <div className="rounded-2xl border border-zinc-800 bg-zinc-900">
+        <div className="rounded-2xl border border-zinc-800 bg-zinc-900 overflow-x-auto">
           <table className="min-w-full divide-y divide-zinc-800">
             <thead className="bg-zinc-950/60">
               <tr>
