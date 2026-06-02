@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import AddApplicationForm from "@/app/components/AddApplicationForm";
+import { Trash2 } from "lucide-react";
 
 type Application = {
   id: string;
@@ -24,6 +25,11 @@ export default function ApplicationsPage() {
     const data = await res.json();
     setApplications(data);
     setLoading(false);
+  }
+
+  async function deleteApplication(id: string) {
+    await fetch(`/api/applications/${id}`, { method: "DELETE" });
+    fetchApplications();
   }
 
   useEffect(() => {
@@ -75,7 +81,7 @@ export default function ApplicationsPage() {
           <table className="min-w-full divide-y divide-zinc-800">
             <thead className="bg-zinc-950/60">
               <tr>
-                {["Company", "Role", "Status", "Location", "Applied On"].map((h) => (
+                {["Company", "Role", "Status", "Location", "Applied On",""].map((h) => (
                   <th key={h} className="px-5 py-3 text-left text-xs font-medium uppercase tracking-wider text-zinc-400">
                     {h}
                   </th>
@@ -91,6 +97,15 @@ export default function ApplicationsPage() {
                   <td className="px-5 py-4 text-sm text-zinc-300">{app.location}</td>
                   <td className="px-5 py-4 text-sm text-zinc-300">
                     {new Date(app.appliedOn).toLocaleDateString()}
+                  </td>
+                  <td className="px-5 py-4 text-sm">
+                    <button
+                      onClick={() => deleteApplication(app.id)}
+                      className="text-zinc-500 hover:text-red-400 cursor-pointer transition-colors"
+                      title="Delete application"
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </button>
                   </td>
                 </tr>
               ))}
