@@ -4,6 +4,16 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
+type Application = {
+  id: string;
+  company: string;
+  role: string;
+  location: string;
+  status: string;
+  appliedOn: string;
+  notes: string | null;
+};
+
 const schema = z.object({
   company: z.string().min(1, "Company is required"),
   role: z.string().min(1, "Role is required"),
@@ -17,9 +27,12 @@ type FormData = z.infer<typeof schema>;
 
 export default function AddApplicationForm({
   onSuccess,
+  application,
 }: {
   onSuccess: () => void;
+  application?: Application;
 }) {
+  const isEditing  = !!application;
   const {
     register,
     handleSubmit,
@@ -27,11 +40,26 @@ export default function AddApplicationForm({
     formState: { errors, isSubmitting },
   } = useForm<FormData>({
     resolver: zodResolver(schema),
+    defaultValues: {
+      company: application?.company ?? "",
+      role: application?.role ?? "",
+      location: application?.location ?? "",
+      status: application?.status ?? "APPLIED",
+      appliedOn: application?.appliedOn
+        ? new Date(application.appliedOn).toISOString().split("T")[0]
+        : "",
+      notes: application?.notes ?? "",
+    },
   });
 
   async function onSubmit(data: FormData) {
-    const res = await fetch("/api/applications", {
-      method: "POST",
+    const url = isEditing
+      ? `/api/applications/${application.id}`
+      : "/api/applications";
+    const method = isEditing ? "PATCH" : "POST";
+
+    const res = await fetch(url, {
+      method,
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data),
     });
@@ -116,7 +144,7 @@ export default function AddApplicationForm({
         disabled={isSubmitting}
         className="w-full rounded-lg bg-white py-2 text-sm font-medium text-zinc-900 hover:bg-zinc-200 disabled:opacity-50 cursor-pointer"
       >
-        {isSubmitting ? "Adding..." : "Add Application"}
+        {isSubmitting ? "Saving..." : isEditing ? "Save Changes" : "Add Application"}
       </button>
     </form>
   );

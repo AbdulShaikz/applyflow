@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import AddApplicationForm from "@/app/components/AddApplicationForm";
-import { Trash2 } from "lucide-react";
+import { Pencil, Trash2 } from "lucide-react";
 import StatusBadge from "@/app/components/StatusBadge";
 
 type Application = {
@@ -20,6 +20,7 @@ export default function ApplicationsPage() {
   const [applications, setApplications] = useState<Application[]>([]);
   const [loading, setLoading] = useState(true);
   const [open, setOpen] = useState(false);
+  const [editingApplication, setEditingApplication] = useState<Application | null>(null);
 
   async function fetchApplications() {
     const res = await fetch("/api/applications");
@@ -55,16 +56,20 @@ export default function ApplicationsPage() {
       </div>
 
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent 
+        <DialogContent
           className="bg-zinc-900 border-zinc-800 text-zinc-100 sm:max-w-lg max-h-[90vh] overflow-y-auto"
           onInteractOutside={(e) => e.preventDefault()}
         >
           <DialogHeader>
-            <DialogTitle>Add Application</DialogTitle>
+            <DialogTitle>
+              {editingApplication ? "Edit Application" : "Add Application"}
+            </DialogTitle>
           </DialogHeader>
           <AddApplicationForm
+            application={editingApplication ?? undefined}
             onSuccess={() => {
               setOpen(false);
+              setEditingApplication(null);
               fetchApplications();
             }}
           />
@@ -102,13 +107,25 @@ export default function ApplicationsPage() {
                     {new Date(app.appliedOn).toLocaleDateString()}
                   </td>
                   <td className="px-5 py-4 text-sm">
-                    <button
-                      onClick={() => deleteApplication(app.id)}
-                      className="text-zinc-500 hover:text-red-400 cursor-pointer transition-colors"
-                      title="Delete application"
-                    >
-                      <Trash2 className="h-4 w-4" />
-                    </button>
+                    <div className="flex items-center gap-3">
+                      <button
+                        onClick={() => {
+                          setEditingApplication(app);
+                          setOpen(true);
+                        }}
+                        className="text-zinc-500 hover:text-blue-400 cursor-pointer transition-colors"
+                        title="Edit application"
+                      >
+                        <Pencil className="h-4 w-4" />
+                      </button>
+                      <button
+                        onClick={() => deleteApplication(app.id)}
+                        className="text-zinc-500 hover:text-red-400 cursor-pointer transition-colors"
+                        title="Delete application"
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </button>
+                    </div>
                   </td>
                 </tr>
               ))}
