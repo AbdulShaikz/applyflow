@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import AddApplicationForm from "@/app/components/AddApplicationForm";
 import { Trash2 } from "lucide-react";
+import StatusBadge from "@/app/components/StatusBadge";
 
 type Application = {
   id: string;
@@ -93,7 +94,9 @@ export default function ApplicationsPage() {
                 <tr key={app.id} className="hover:bg-zinc-800/40">
                   <td className="px-5 py-4 text-sm font-medium text-white">{app.company}</td>
                   <td className="px-5 py-4 text-sm text-zinc-300">{app.role}</td>
-                  <td className="px-5 py-4 text-sm text-zinc-300">{app.status}</td>
+                  <td className="px-5 py-4 text-sm text-zinc-300">
+                    <StatusBadge status={app.status} />
+                  </td>
                   <td className="px-5 py-4 text-sm text-zinc-300">{app.location}</td>
                   <td className="px-5 py-4 text-sm text-zinc-300">
                     {new Date(app.appliedOn).toLocaleDateString()}
