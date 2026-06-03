@@ -10,7 +10,7 @@ export default function Home() {
             <h1 className="text-2xl font-semibold tracking-tight">ApplyFlow</h1>
             <p className="text-sm text-zinc-400">Job search, organized.</p>
           </div>
-          <div className="flex gap-3">
+          <div className="hidden sm:flex gap-3">
             <Link
               href="/login"
               className="rounded-lg border border-zinc-700 px-4 py-2 text-sm hover:bg-zinc-900 transition-colors"
@@ -75,7 +75,7 @@ export default function Home() {
 
         <footer className="border-t border-zinc-800 pt-6 pb-2">
           <p className="text-xs text-zinc-600 text-center">
-            ApplyFlow — Built with Next.js, Prisma, and PostgreSQL
+            ApplyFlow &ndash; Built with Next.js, Prisma, and PostgreSQL
           </p>
         </footer>
 

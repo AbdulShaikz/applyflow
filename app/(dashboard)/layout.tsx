@@ -18,7 +18,7 @@ export default async function DashboardLayout({
 
   return (
     <div className="flex min-h-screen bg-zinc-950 text-zinc-100">
-      <aside className="hidden w-64 flex-col border-r border-zinc-800 px-5 py-6 md:flex">
+      <aside className="hidden w-64 flex-col border-r border-zinc-800 px-5 py-6 pb-8 md:flex">
         <h2 className="text-xl font-semibold">ApplyFlow</h2>
         <p className="mt-1 text-sm text-zinc-400">Job Tracking</p>
         <NavLinks />
@@ -47,7 +47,7 @@ export default async function DashboardLayout({
             {session.user?.name ?? session.user?.email}
           </div>
         </header>
-        <main className="flex-1 p-6">{children}</main>
+        <main className="flex-1 p-3 sm:p-6">{children}</main>
       </div>
     </div>
   );

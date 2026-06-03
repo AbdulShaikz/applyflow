@@ -5,6 +5,8 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import AddApplicationForm from "@/app/components/AddApplicationForm";
 import { Pencil, Trash2 } from "lucide-react";
 import StatusBadge from "@/app/components/StatusBadge";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 
 type Application = {
   id: string;
@@ -46,27 +48,27 @@ export default function ApplicationsPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h1 className="text-2xl font-semibold tracking-tight">Applications</h1>
           <p className="mt-1 text-sm text-zinc-400">
             Track every job application in one place.
           </p>
         </div>
-        <button
+        <Button
           onClick={() => setOpen(true)}
-          className="rounded-lg bg-white px-4 py-2 text-sm font-medium text-zinc-900 hover:bg-zinc-200"
+          className="w-full sm:w-auto cursor-pointer"
         >
           + Add Application
-        </button>
+        </Button>
       </div>
 
-      <input
+      <Input
         type="text"
         placeholder="Search by company or role..."
         value={search}
         onChange={(e) => setSearch(e.target.value)}
-        className="w-full rounded-lg border border-zinc-700 bg-zinc-900 px-3 py-2 text-sm text-white placeholder:text-zinc-500 focus:border-zinc-500 focus:outline-none"
+        className="bg-zinc-900 border-zinc-700 text-white placeholder:text-zinc-500 focus-visible:ring-zinc-600"
       />
       
       <Dialog open={open} onOpenChange={setOpen}>
