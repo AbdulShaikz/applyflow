@@ -9,6 +9,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import NavLinks from "./NavLinks";
 
 const navItems = [
   { href: "/dashboard", label: "Dashboard" },
@@ -38,18 +39,7 @@ export default function MobileNav() {
           <h2 className="text-xl font-semibold">ApplyFlow</h2>
           <p className="mt-1 text-sm text-zinc-400">Job Tracking</p>
         </div>
-        <nav className="mt-8 flex-1 space-y-1">
-          {navItems.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              onClick={() => setOpen(false)}
-              className="block rounded-lg px-3 py-2 text-sm text-zinc-300 hover:bg-zinc-900 hover:text-white"
-            >
-              {item.label}
-            </Link>
-          ))}
-        </nav>
+        <NavLinks onNavigate={() => setOpen(false)} />
         <form action="/api/auth/signout" method="POST">
           <button
             type="submit"
