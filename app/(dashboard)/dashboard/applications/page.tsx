@@ -42,37 +42,41 @@ export default function ApplicationsPage() {
       app.company.toLowerCase().includes(search.toLowerCase()) ||
       app.role.toLowerCase().includes(search.toLowerCase())
   );
+  
   useEffect(() => {
     fetchApplications();
   }, []);
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div>
+        <h1 className="text-2xl font-bold tracking-tight text-white">Applications</h1>
+        <p className="mt-1 text-sm text-zinc-400">
+          Track every job application in one place.
+        </p>
+      </div>
+
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <h1 className="text-2xl font-semibold tracking-tight">Applications</h1>
-          <p className="mt-1 text-sm text-zinc-400">
-            Track every job application in one place.
-          </p>
+        <div className="w-full sm:max-w-xs">
+          <Input
+            type="text"
+            placeholder="Search by company or role..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="bg-zinc-900/50 border-zinc-800 text-white placeholder:text-zinc-500 focus-visible:ring-zinc-700 w-full"
+          />
         </div>
         <Button
-          onClick={() => setOpen(true)}
-          className="w-full sm:w-auto cursor-pointer"
+          onClick={() => {
+            setEditingApplication(null);
+            setOpen(true);
+          }}
+          className="w-full sm:w-auto cursor-pointer bg-white text-zinc-950 hover:bg-zinc-200 font-medium"
         >
           + Add Application
         </Button>
       </div>
 
-      <div className="max-w-sm">
-        <Input
-          type="text"
-          placeholder="Search by company or role..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          className="bg-zinc-900 border-zinc-700 text-white placeholder:text-zinc-500 focus-visible:ring-zinc-600"
-        />
-      </div>
-      
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent
           className="bg-zinc-900 border-zinc-800 text-zinc-100 sm:max-w-lg max-h-[90vh] overflow-y-auto"
@@ -97,59 +101,68 @@ export default function ApplicationsPage() {
       {loading ? (
         <p className="text-sm text-zinc-400">Loading...</p>
       ) : filtered.length === 0 ? (
-        <div className="rounded-2xl border border-zinc-800 bg-zinc-900 p-6 text-sm text-zinc-400">
+        <div className="rounded-xl border border-zinc-800 bg-zinc-900/50 p-12 text-center text-sm text-zinc-400">
           {search ? "No applications match your search." : "No applications yet. Add your first one."}
         </div>
       ) : (
-        <div className="rounded-2xl border border-zinc-800 bg-zinc-900 overflow-x-auto">
-          <table className="min-w-full divide-y divide-zinc-800">
-            <thead className="bg-zinc-950/60">
-              <tr>
-                {["Company", "Role", "Status", "Location", "Applied On","Actions"].map((h) => (
-                  <th key={h} className="px-5 py-3 text-left text-xs font-medium uppercase tracking-wider text-zinc-400 whitespace-nowrap">
-                    {h}
+        <div className="rounded-xl border border-zinc-800 bg-zinc-900/30 overflow-hidden shadow-xl">
+          <div className="overflow-x-auto">
+            <table className="min-w-full divide-y divide-zinc-800/80 backend-table">
+              <thead className="bg-zinc-900/60">
+                <tr>
+                  {['Company', 'Role', 'Status', 'Location', 'Applied On'].map((h) => (
+                    <th key={h} className="px-5 py-3.5 text-left text-xs font-semibold uppercase tracking-wider text-zinc-400 whitespace-nowrap">
+                      {h}
+                    </th>
+                  ))}
+                  <th className="px-5 py-3.5 text-right text-xs font-semibold uppercase tracking-wider text-zinc-400">
+                    Actions
                   </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-zinc-800">
-              {filtered.map((app) => (
-                <tr key={app.id} className="hover:bg-zinc-800/40">
-                  <td className="px-5 py-4 text-sm font-medium text-white whitespace-nowrap">{app.company}</td>
-                  <td className="px-5 py-4 text-sm text-zinc-300 whitespace-nowrap">{app.role}</td>
-                  <td className="px-5 py-4 text-sm text-zinc-300 whitespace-nowrap">
-                    <StatusBadge status={app.status} />
-                  </td>
-                  <td className="px-5 py-4 text-sm text-zinc-300 whitespace-nowrap">{app.location}</td>
-                  <td className="px-5 py-4 text-sm text-zinc-300 whitespace-nowrap">
-                    {new Date(app.appliedOn).toLocaleDateString()}
-                  </td>
-                  <td className="px-5 py-4 text-sm whitespace-nowrap">
-                    <div className="flex items-center justify-end gap-3">
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={() => { setEditingApplication(app); setOpen(true); }}
-                        className="h-8 w-8 text-zinc-300 hover:text-blue-400 cursor-pointer"
-                        title="Edit application"
-                      >
-                        <Pencil className="h-4 w-4" />
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={() => deleteApplication(app.id)}
-                        className="h-8 w-8 text-zinc-300 hover:text-red-400 cursor-pointer"
-                        title="Delete application"
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
-                    </div>
-                  </td>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody className="divide-y divide-zinc-800/60 bg-zinc-900/10">
+                {filtered.map((app) => (
+                  <tr key={app.id} className="hover:bg-zinc-800/30 transition-colors">
+                    <td className="px-5 py-3.5 text-sm font-medium text-white whitespace-nowrap">{app.company}</td>
+                    <td className="px-5 py-3.5 text-sm text-zinc-300 whitespace-nowrap">{app.role}</td>
+                    <td className="px-5 py-3.5 text-sm text-zinc-300 whitespace-nowrap">
+                      <StatusBadge status={app.status} />
+                    </td>
+                    <td className="px-5 py-3.5 text-sm text-zinc-300 whitespace-nowrap">{app.location}</td>
+                    <td className="px-5 py-3.5 text-sm text-zinc-300 whitespace-nowrap">
+                      {new Date(app.appliedOn).toLocaleDateString(undefined, {
+                        year: 'numeric',
+                        month: 'short',
+                        day: 'numeric'
+                      })}
+                    </td>
+                    <td className="px-5 py-3.5 text-sm whitespace-nowrap">
+                      <div className="flex items-center justify-end gap-1.5">
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          onClick={() => { setEditingApplication(app); setOpen(true); }}
+                          className="h-8 w-8 text-zinc-400 hover:text-white hover:bg-zinc-800/60 cursor-pointer transition-colors"
+                          title="Edit application"
+                        >
+                          <Pencil className="h-3.5 w-3.5" />
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          onClick={() => deleteApplication(app.id)}
+                          className="h-8 w-8 text-zinc-400 hover:text-red-400 hover:bg-red-950/20 cursor-pointer transition-colors"
+                          title="Delete application"
+                        >
+                          <Trash2 className="h-3.5 w-3.5" />
+                        </Button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       )}
     </div>
