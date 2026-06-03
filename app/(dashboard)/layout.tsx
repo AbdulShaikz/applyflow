@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { auth, signOut } from "@/lib/auth";
 import { redirect } from "next/navigation";
+import MobileNav from "../components/MobileNav";
 
 const navItems = [
   { href: "/dashboard", label: "Dashboard" },
@@ -48,7 +49,10 @@ export default async function DashboardLayout({
 
       <div className="flex flex-1 flex-col">
         <header className="flex items-center justify-between border-b border-zinc-800 px-6 py-4">
-          <p className="text-sm text-zinc-400">Welcome back</p>
+          <div className="flex items-center gap-3">
+            <MobileNav />
+            <p className="text-sm text-zinc-400">Welcome back</p>
+          </div>
           <div className="rounded-full border border-zinc-700 px-3 py-1 text-sm text-zinc-300">
             {session.user?.name ?? session.user?.email}
           </div>
