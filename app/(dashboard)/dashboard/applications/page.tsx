@@ -21,6 +21,7 @@ export default function ApplicationsPage() {
   const [loading, setLoading] = useState(true);
   const [open, setOpen] = useState(false);
   const [editingApplication, setEditingApplication] = useState<Application | null>(null);
+  const [search, setSearch] = useState("");
 
   async function fetchApplications() {
     const res = await fetch("/api/applications");
@@ -34,6 +35,11 @@ export default function ApplicationsPage() {
     fetchApplications();
   }
 
+  const filtered = applications.filter(
+    (app) =>
+      app.company.toLowerCase().includes(search.toLowerCase()) ||
+      app.role.toLowerCase().includes(search.toLowerCase())
+  );
   useEffect(() => {
     fetchApplications();
   }, []);
@@ -55,6 +61,14 @@ export default function ApplicationsPage() {
         </button>
       </div>
 
+      <input
+        type="text"
+        placeholder="Search by company or role..."
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+        className="w-full rounded-lg border border-zinc-700 bg-zinc-900 px-3 py-2 text-sm text-white placeholder:text-zinc-500 focus:border-zinc-500 focus:outline-none"
+      />
+      
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent
           className="bg-zinc-900 border-zinc-800 text-zinc-100 sm:max-w-lg max-h-[90vh] overflow-y-auto"
@@ -78,9 +92,9 @@ export default function ApplicationsPage() {
 
       {loading ? (
         <p className="text-sm text-zinc-400">Loading...</p>
-      ) : applications.length === 0 ? (
+      ) : filtered.length === 0 ? (
         <div className="rounded-2xl border border-zinc-800 bg-zinc-900 p-6 text-sm text-zinc-400">
-          No applications yet. Add your first one.
+          {search ? "No applications match your search." : "No applications yet. Add your first one."}
         </div>
       ) : (
         <div className="rounded-2xl border border-zinc-800 bg-zinc-900 overflow-x-auto">
@@ -95,7 +109,7 @@ export default function ApplicationsPage() {
               </tr>
             </thead>
             <tbody className="divide-y divide-zinc-800">
-              {applications.map((app) => (
+              {filtered.map((app) => (
                 <tr key={app.id} className="hover:bg-zinc-800/40">
                   <td className="px-5 py-4 text-sm font-medium text-white">{app.company}</td>
                   <td className="px-5 py-4 text-sm text-zinc-300">{app.role}</td>
