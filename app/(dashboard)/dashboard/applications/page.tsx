@@ -105,8 +105,8 @@ export default function ApplicationsPage() {
           <table className="min-w-full divide-y divide-zinc-800">
             <thead className="bg-zinc-950/60">
               <tr>
-                {["Company", "Role", "Status", "Location", "Applied On",""].map((h) => (
-                  <th key={h} className="px-5 py-3 text-left text-xs font-medium uppercase tracking-wider text-zinc-400">
+                {["Company", "Role", "Status", "Location", "Applied On","Actions"].map((h) => (
+                  <th key={h} className="px-5 py-3 text-left text-xs font-medium uppercase tracking-wider text-zinc-400 whitespace-nowrap">
                     {h}
                   </th>
                 ))}
@@ -115,22 +115,19 @@ export default function ApplicationsPage() {
             <tbody className="divide-y divide-zinc-800">
               {filtered.map((app) => (
                 <tr key={app.id} className="hover:bg-zinc-800/40">
-                  <td className="px-5 py-4 text-sm font-medium text-white">{app.company}</td>
-                  <td className="px-5 py-4 text-sm text-zinc-300">{app.role}</td>
-                  <td className="px-5 py-4 text-sm text-zinc-300">
+                  <td className="px-5 py-4 text-sm font-medium text-white whitespace-nowrap">{app.company}</td>
+                  <td className="px-5 py-4 text-sm text-zinc-300 whitespace-nowrap">{app.role}</td>
+                  <td className="px-5 py-4 text-sm text-zinc-300 whitespace-nowrap">
                     <StatusBadge status={app.status} />
                   </td>
-                  <td className="px-5 py-4 text-sm text-zinc-300">{app.location}</td>
-                  <td className="px-5 py-4 text-sm text-zinc-300">
+                  <td className="px-5 py-4 text-sm text-zinc-300 whitespace-nowrap">{app.location}</td>
+                  <td className="px-5 py-4 text-sm text-zinc-300 whitespace-nowrap">
                     {new Date(app.appliedOn).toLocaleDateString()}
                   </td>
-                  <td className="px-5 py-4 text-sm">
-                    <div className="flex items-center gap-3">
+                  <td className="px-5 py-4 text-sm whitespace-nowrap">
+                    <div className="flex items-center justify-end gap-3">
                       <button
-                        onClick={() => {
-                          setEditingApplication(app);
-                          setOpen(true);
-                        }}
+                        onClick={() => { setEditingApplication(app); setOpen(true); }}
                         className="text-zinc-500 hover:text-blue-400 cursor-pointer transition-colors"
                         title="Edit application"
                       >
