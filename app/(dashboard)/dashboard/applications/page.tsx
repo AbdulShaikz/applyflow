@@ -63,13 +63,15 @@ export default function ApplicationsPage() {
         </Button>
       </div>
 
-      <Input
-        type="text"
-        placeholder="Search by company or role..."
-        value={search}
-        onChange={(e) => setSearch(e.target.value)}
-        className="bg-zinc-900 border-zinc-700 text-white placeholder:text-zinc-500 focus-visible:ring-zinc-600"
-      />
+      <div className="max-w-sm">
+        <Input
+          type="text"
+          placeholder="Search by company or role..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          className="bg-zinc-900 border-zinc-700 text-white placeholder:text-zinc-500 focus-visible:ring-zinc-600"
+        />
+      </div>
       
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent
