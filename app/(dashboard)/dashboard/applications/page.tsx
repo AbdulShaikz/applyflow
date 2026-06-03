@@ -126,20 +126,24 @@ export default function ApplicationsPage() {
                   </td>
                   <td className="px-5 py-4 text-sm whitespace-nowrap">
                     <div className="flex items-center justify-end gap-3">
-                      <button
+                      <Button
+                        variant="ghost"
+                        size="icon"
                         onClick={() => { setEditingApplication(app); setOpen(true); }}
-                        className="text-zinc-500 hover:text-blue-400 cursor-pointer transition-colors"
+                        className="h-8 w-8 text-zinc-300 hover:text-blue-400 cursor-pointer"
                         title="Edit application"
                       >
                         <Pencil className="h-4 w-4" />
-                      </button>
-                      <button
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="icon"
                         onClick={() => deleteApplication(app.id)}
-                        className="text-zinc-500 hover:text-red-400 cursor-pointer transition-colors"
+                        className="h-8 w-8 text-zinc-300 hover:text-red-400 cursor-pointer"
                         title="Delete application"
                       >
                         <Trash2 className="h-4 w-4" />
-                      </button>
+                      </Button>
                     </div>
                   </td>
                 </tr>
