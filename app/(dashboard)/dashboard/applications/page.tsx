@@ -7,6 +7,7 @@ import { Pencil, Trash2 } from "lucide-react";
 import StatusBadge from "@/app/components/StatusBadge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 
 type Application = {
   id: string;
@@ -24,6 +25,7 @@ export default function ApplicationsPage() {
   const [open, setOpen] = useState(false);
   const [editingApplication, setEditingApplication] = useState<Application | null>(null);
   const [search, setSearch] = useState("");
+  const [deletingId, setDeletingId] = useState<string | null>(null);
 
   async function fetchApplications() {
     const res = await fetch("/api/applications");
@@ -34,6 +36,7 @@ export default function ApplicationsPage() {
 
   async function deleteApplication(id: string) {
     await fetch(`/api/applications/${id}`, { method: "DELETE" });
+    setDeletingId(null);
     fetchApplications();
   }
 
@@ -150,7 +153,7 @@ export default function ApplicationsPage() {
                         <Button
                           variant="ghost"
                           size="icon"
-                          onClick={() => deleteApplication(app.id)}
+                          onClick={() => setDeletingId(app.id)}
                           className="h-8 w-8 text-zinc-400 hover:text-red-400 hover:bg-red-950/20 cursor-pointer transition-colors"
                           title="Delete application"
                         >
@@ -165,6 +168,27 @@ export default function ApplicationsPage() {
           </div>
         </div>
       )}
+      <AlertDialog open={!!deletingId} onOpenChange={() => setDeletingId(null)}>
+        <AlertDialogContent className="bg-zinc-900 border-zinc-800 text-zinc-100">
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete application?</AlertDialogTitle>
+            <AlertDialogDescription className="text-zinc-400">
+              This cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel className="bg-transparent border-zinc-700 text-zinc-300 hover:bg-zinc-800 hover:text-white">
+              Cancel
+            </AlertDialogCancel>
+            <AlertDialogAction
+              onClick={() => deletingId && deleteApplication(deletingId)}
+              className="bg-red-600 hover:bg-red-700 text-white"
+            >
+              Delete
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }
