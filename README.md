@@ -15,11 +15,14 @@ ApplyFlow gives you one place to track applications, monitor stages, and follow 
 
 ## Features
 
-- Email/password auth with bcrypt hashing
-- Add, edit, delete applications
+- Email/password authentication with secure bcrypt hashing
+- Add, edit, delete applications with confirmation on delete
 - Status tracking - Applied, Phone Screen, Interview, Offer, Rejected
 - Dashboard metrics - total, interviews, offers, rejected
 - Search by company or role
+- Filter by application status
+- Expandable rows to view notes
+- Responsive layout with mobile navigation
 
 ## Setup
 
