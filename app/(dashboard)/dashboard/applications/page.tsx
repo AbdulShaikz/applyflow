@@ -27,6 +27,7 @@ export default function ApplicationsPage() {
   const [search, setSearch] = useState("");
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [statusFilter, setStatusFilter] = useState<string>("ALL");
+  const [expandedId, setExpandedId] = useState<string | null>(null);
 
   async function fetchApplications() {
     const res = await fetch("/api/applications");
@@ -145,43 +146,56 @@ export default function ApplicationsPage() {
               </thead>
               <tbody className="divide-y divide-zinc-800/60 bg-zinc-900/10">
                 {filtered.map((app) => (
-                  <tr key={app.id} className="hover:bg-zinc-800/30 transition-colors">
-                    <td className="px-5 py-3.5 text-sm font-medium text-white whitespace-nowrap">{app.company}</td>
-                    <td className="px-5 py-3.5 text-sm text-zinc-300 whitespace-nowrap">{app.role}</td>
-                    <td className="px-5 py-3.5 text-sm text-zinc-300 whitespace-nowrap">
-                      <StatusBadge status={app.status} />
-                    </td>
-                    <td className="px-5 py-3.5 text-sm text-zinc-300 whitespace-nowrap">{app.location}</td>
-                    <td className="px-5 py-3.5 text-sm text-zinc-300 whitespace-nowrap">
-                      {new Date(app.appliedOn).toLocaleDateString(undefined, {
-                        year: 'numeric',
-                        month: 'short',
-                        day: 'numeric'
-                      })}
-                    </td>
-                    <td className="px-5 py-3.5 text-sm whitespace-nowrap">
-                      <div className="flex items-center justify-end gap-1.5">
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          onClick={() => { setEditingApplication(app); setOpen(true); }}
-                          className="h-8 w-8 text-zinc-400 hover:text-white hover:bg-zinc-800/60 cursor-pointer transition-colors"
-                          title="Edit application"
-                        >
-                          <Pencil className="h-3.5 w-3.5" />
-                        </Button>
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          onClick={() => setDeletingId(app.id)}
-                          className="h-8 w-8 text-zinc-400 hover:text-red-400 hover:bg-red-950/20 cursor-pointer transition-colors"
-                          title="Delete application"
-                        >
-                          <Trash2 className="h-3.5 w-3.5" />
-                        </Button>
-                      </div>
-                    </td>
-                  </tr>
+                  <>
+                    <tr 
+                      key={app.id}
+                      onClick={() => setExpandedId(expandedId === app.id ? null : app.id)}
+                      className="hover:bg-zinc-800/30 transition-colors cursor-pointer"
+                    >
+                      <td className="px-5 py-3.5 text-sm font-medium text-white whitespace-nowrap">{app.company}</td>
+                      <td className="px-5 py-3.5 text-sm text-zinc-300 whitespace-nowrap">{app.role}</td>
+                      <td className="px-5 py-3.5 text-sm text-zinc-300 whitespace-nowrap">
+                        <StatusBadge status={app.status} />
+                      </td>
+                      <td className="px-5 py-3.5 text-sm text-zinc-300 whitespace-nowrap">{app.location}</td>
+                      <td className="px-5 py-3.5 text-sm text-zinc-300 whitespace-nowrap">
+                        {new Date(app.appliedOn).toLocaleDateString(undefined, {
+                          year: 'numeric',
+                          month: 'short',
+                          day: 'numeric'
+                        })}
+                      </td>
+                      <td className="px-5 py-3.5 text-sm whitespace-nowrap" onClick={(e) => {e.stopPropagation()}}>
+                        <div className="flex items-center justify-end gap-1.5">
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => { setEditingApplication(app); setOpen(true); }}
+                            className="h-8 w-8 text-zinc-400 hover:text-white hover:bg-zinc-800/60 cursor-pointer transition-colors"
+                            title="Edit application"
+                          >
+                            <Pencil className="h-3.5 w-3.5" />
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => setDeletingId(app.id)}
+                            className="h-8 w-8 text-zinc-400 hover:text-red-400 hover:bg-red-950/20 cursor-pointer transition-colors"
+                            title="Delete application"
+                          >
+                            <Trash2 className="h-3.5 w-3.5" />
+                          </Button>
+                        </div>
+                      </td>
+                    </tr>
+                    {expandedId === app.id && (
+                      <tr>
+                        <td colSpan={6} className="px-5 py-3 bg-zinc-900/60 text-sm text-zinc-400">
+                          {app.notes ? app.notes : "No notes added."}
+                        </td>
+                      </tr>
+                    )}
+                  </>
                 ))}
               </tbody>
             </table>
