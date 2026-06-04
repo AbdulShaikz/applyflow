@@ -26,6 +26,7 @@ export default function ApplicationsPage() {
   const [editingApplication, setEditingApplication] = useState<Application | null>(null);
   const [search, setSearch] = useState("");
   const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [statusFilter, setStatusFilter] = useState<string>("ALL");
 
   async function fetchApplications() {
     const res = await fetch("/api/applications");
@@ -40,11 +41,14 @@ export default function ApplicationsPage() {
     fetchApplications();
   }
 
-  const filtered = applications.filter(
-    (app) =>
+  const filtered = applications.filter((app) => {
+    const matchesSearch =
       app.company.toLowerCase().includes(search.toLowerCase()) ||
-      app.role.toLowerCase().includes(search.toLowerCase())
-  );
+      app.role.toLowerCase().includes(search.toLowerCase());
+    const matchesStatus =
+      statusFilter === "ALL" || app.status === statusFilter;
+    return matchesSearch && matchesStatus;
+  });
   
   useEffect(() => {
     fetchApplications();
@@ -78,6 +82,22 @@ export default function ApplicationsPage() {
         >
           + Add Application
         </Button>
+      </div>
+
+      <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide">
+        {["ALL", "APPLIED", "PHONE_SCREEN", "INTERVIEW", "OFFER", "REJECTED", "FOLLOW_UP", "WITHDRAWN"].map((status) => (
+          <button
+            key={status}
+            onClick={() => setStatusFilter(status)}
+            className={`rounded-full px-3 py-1 text-xs font-medium transition-colors cursor-pointer whitespace-nowrap ${
+              statusFilter === status
+                ? "bg-white text-zinc-900"
+                : "border border-zinc-700 text-zinc-400 hover:border-zinc-500 hover:text-zinc-200"
+            }`}
+          >
+            {status === "ALL" ? "All" : status.replace(/_/g, " ")}
+          </button>
+        ))}
       </div>
 
       <Dialog open={open} onOpenChange={setOpen}>
