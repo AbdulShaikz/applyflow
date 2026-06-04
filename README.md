@@ -1,36 +1,48 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# ApplyFlow
 
-## Getting Started
+> Track every job application. Know exactly where you stand.
 
-First, run the development server:
+**[Live Demo →](https://applyflow-saas.vercel.app)**
+
+![Dashboard](public/dashboard.png)
+
+Job searching across 10 tabs and a spreadsheet gets messy fast.
+ApplyFlow gives you one place to track applications, monitor stages, and follow up at the right time.
+
+## Stack
+
+`Next.js 15` · `TypeScript` · `PostgreSQL` · `Supabase` · `Prisma` · `NextAuth v5` · `React Hook Form` · `Zod` · `shadcn/ui`
+
+## Features
+
+- Email/password auth with bcrypt hashing
+- Add, edit, delete applications
+- Status tracking - Applied, Phone Screen, Interview, Offer, Rejected
+- Dashboard metrics - total, interviews, offers, rejected
+- Search by company or role
+
+## Setup
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone https://github.com/AbdulShaikz/applyflow
+cd applyflow
+npm install
+cp .env.example .env
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Fill in `.env`:
+```env
+DATABASE_URL=    # Supabase PostgreSQL connection string
+AUTH_SECRET=     # openssl rand -base64 32
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+npx prisma migrate dev
+npm run dev
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Trade-offs
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- **Client-side search** - fast at personal scale, would move to Postgres `contains` with debouncing for multi-user
+- **No pagination** - first thing to add before opening to other users
+- **Email/password only** - OAuth would be the next auth addition
