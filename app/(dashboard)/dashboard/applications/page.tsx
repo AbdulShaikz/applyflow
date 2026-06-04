@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import AddApplicationForm from "@/app/components/AddApplicationForm";
 import { Pencil, Trash2 } from "lucide-react";
@@ -64,14 +64,14 @@ export default function ApplicationsPage() {
         </p>
       </div>
 
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <div className="w-full sm:max-w-xs">
+      <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+        <div className="w-full min-w-0 md:max-w-xs">
           <Input
             type="text"
             placeholder="Search by company or role..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="bg-zinc-900/50 border-zinc-800 text-white placeholder:text-zinc-500 focus-visible:ring-zinc-700 w-full"
+            className="w-full min-w-0 bg-zinc-900/50 border-zinc-800 text-white placeholder:text-zinc-500 focus-visible:ring-zinc-700"
           />
         </div>
         <Button
@@ -79,13 +79,13 @@ export default function ApplicationsPage() {
             setEditingApplication(null);
             setOpen(true);
           }}
-          className="w-full sm:w-auto cursor-pointer bg-white text-zinc-950 hover:bg-zinc-200 font-medium"
+          className="w-full md:w-auto cursor-pointer bg-white text-zinc-950 hover:bg-zinc-200 font-medium shrink-0 whitespace-nowrap"
         >
           + Add Application
         </Button>
       </div>
 
-      <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide">
+      <div className="flex flex-wrap gap-2 pb-1">
         {["ALL", "APPLIED", "PHONE_SCREEN", "INTERVIEW", "OFFER", "REJECTED", "FOLLOW_UP", "WITHDRAWN"].map((status) => (
           <button
             key={status}
@@ -130,7 +130,56 @@ export default function ApplicationsPage() {
         </div>
       ) : (
         <div className="rounded-xl border border-zinc-800 bg-zinc-900/30 overflow-hidden shadow-xl">
-          <div className="overflow-x-auto">
+          <div className="md:hidden space-y-3 p-3 ">
+            {filtered.map((app) => (
+              <div
+                key={app.id}
+                className="rounded-xl border border-zinc-800 bg-zinc-900/50 p-4 space-y-3"
+              >
+                <div className="flex items-start justify-between">
+                  <div>
+                    <p className="text-sm font-semibold text-white">{app.company}</p>
+                    <p className="text-sm text-zinc-400 mt-0.5">{app.role}</p>
+                  </div>
+                  <div className="flex items-center gap-1" onClick={(e) => e.stopPropagation()}>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => { setEditingApplication(app); setOpen(true); }}
+                      className="h-8 w-8 text-zinc-400 hover:text-white cursor-pointer"
+                      title="Edit application"
+                    >
+                      <Pencil className="h-3.5 w-3.5" />
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => setDeletingId(app.id)}
+                      className="h-8 w-8 text-zinc-400 hover:text-red-400 cursor-pointer"
+                      title="Delete application"
+                    >
+                      <Trash2 className="h-3.5 w-3.5" />
+                    </Button>
+                  </div>
+                </div>
+                <StatusBadge status={app.status} />
+                <div className="flex items-center justify-between text-xs text-zinc-500">
+                  <span>{app.location}</span>
+                  <span>{new Date(app.appliedOn).toLocaleDateString(undefined, {
+                    year: "numeric",
+                    month: "short",
+                    day: "numeric",
+                  })}</span>
+                </div>
+                {app.notes && (
+                  <p className="text-xs text-zinc-500 border-t border-zinc-800 pt-2">
+                    {app.notes}
+                  </p>
+                )}
+              </div>
+            ))}
+          </div>
+          <div className="hidden md:block overflow-x-auto">
             <table className="min-w-full divide-y divide-zinc-800/80 backend-table">
               <thead className="bg-zinc-900/60">
                 <tr>
@@ -146,9 +195,8 @@ export default function ApplicationsPage() {
               </thead>
               <tbody className="divide-y divide-zinc-800/60 bg-zinc-900/10">
                 {filtered.map((app) => (
-                  <>
+                  <Fragment key={app.id}>
                     <tr 
-                      key={app.id}
                       onClick={() => setExpandedId(expandedId === app.id ? null : app.id)}
                       className="hover:bg-zinc-800/30 transition-colors cursor-pointer"
                     >
@@ -195,7 +243,7 @@ export default function ApplicationsPage() {
                         </td>
                       </tr>
                     )}
-                  </>
+                  </Fragment>
                 ))}
               </tbody>
             </table>
