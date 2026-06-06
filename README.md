@@ -4,7 +4,9 @@
 
 **[Live Demo →](https://applyflow-saas.vercel.app)**
 
-![Dashboard](public/dashboard.png)
+![Homepage](public/homepage.jpg)
+![Dashboard](public/dashboard.jpg)
+![Applications](public/applications.jpg)
 
 Job searching across 10 tabs and a spreadsheet gets messy fast.
 ApplyFlow gives you one place to track applications, monitor stages, and follow up at the right time.
