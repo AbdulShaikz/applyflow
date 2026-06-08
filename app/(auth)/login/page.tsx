@@ -9,6 +9,7 @@ export default function LoginPage() {
   const router = useRouter();
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [googleLoading, setGoogleLoading] = useState(false);
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -69,7 +70,25 @@ export default function LoginPage() {
             {loading ? "Signing in..." : "Sign in"}
           </button>
         </form>
+        <div className="mt-4">
+          <div className="relative flex items-center">
+            <div className="flex-1 border-t border-zinc-800" />
+            <span className="mx-3 text-xs text-zinc-500">or</span>
+            <div className="flex-1 border-t border-zinc-800" />
+          </div>
 
+          <button
+            type="button"
+            disabled={googleLoading}
+            onClick={async () => {
+              setGoogleLoading(true);
+              await signIn("google", { callbackUrl: "/dashboard" });
+            }}
+            className="mt-4 w-full rounded-lg border border-zinc-700 px-4 py-2 text-sm text-zinc-300 hover:bg-zinc-900 transition-colors cursor-pointer disabled:opacity-50"
+          >
+            {googleLoading ? "Redirecting..." : "Continue with Google"}
+          </button>
+        </div>
         <p className="mt-6 text-center text-sm text-zinc-400">
           Don&apos;t have an account?{" "}
           <Link href="/register" className="text-white hover:underline">
