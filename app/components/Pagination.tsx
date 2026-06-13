@@ -9,18 +9,24 @@ interface PaginationProps {
   onPageChange: (page: number) => void;
 }
 
-export default function Pagination({ page, totalPages, total, limit, onPageChange }: PaginationProps) {
+export default function Pagination({
+  page,
+  totalPages,
+  total,
+  limit,
+  onPageChange,
+}: PaginationProps) {
   if (totalPages <= 1) return null;
 
   const from = (page - 1) * limit + 1;
-  const to   = Math.min(page * limit, total);
+  const to = Math.min(page * limit, total);
 
   return (
-    <div className="flex items-center justify-between px-1 pt-4 pb-2">
-      <p className="text-xs text-zinc-500">
+    <div className="flex flex-col items-center gap-3 px-1 pt-4 pb-2 sm:flex-row sm:justify-between">
+      <p className="text-xs text-zinc-500 order-2 sm:order-1">
         Showing {from}–{to} of {total}
       </p>
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-2 order-1 sm:order-2">
         <Button
           variant="outline"
           size="sm"
