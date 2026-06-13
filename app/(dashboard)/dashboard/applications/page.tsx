@@ -8,6 +8,7 @@ import StatusBadge from "@/app/components/StatusBadge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
+import Pagination from "@/app/components/Pagination";
 
 type Application = {
   id: string;
@@ -28,11 +29,18 @@ export default function ApplicationsPage() {
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [statusFilter, setStatusFilter] = useState<string>("ALL");
   const [expandedId, setExpandedId] = useState<string | null>(null);
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [total, setTotal] = useState(0);
+  const LIMIT = 10;
 
-  async function fetchApplications() {
-    const res = await fetch("/api/applications");
+  async function fetchApplications(pageNum = page) {
+    setLoading(true);
+    const res = await fetch(`/api/applications?page=${pageNum}&limit=${LIMIT}`);
     const data = await res.json();
-    setApplications(data);
+    setApplications(data.applications);
+    setTotalPages(data.pagination.totalPages);
+    setTotal(data.pagination.total);
     setLoading(false);
   }
 
@@ -52,8 +60,13 @@ export default function ApplicationsPage() {
   });
   
   useEffect(() => {
-    fetchApplications();
-  }, []);
+    fetchApplications(page);
+  }, [page]);
+
+  function handlePageChange(newPage: number){
+    setPage(newPage);
+    setExpandedId(null);
+  }
 
   return (
     <div className="space-y-6 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -70,7 +83,7 @@ export default function ApplicationsPage() {
             type="text"
             placeholder="Search by company or role..."
             value={search}
-            onChange={(e) => setSearch(e.target.value)}
+            onChange={(e) => {setSearch(e.target.value); setPage(1);}}
             className="w-full min-w-0 bg-zinc-900/50 border-zinc-800 text-white placeholder:text-zinc-500 focus-visible:ring-zinc-700"
           />
         </div>
@@ -89,7 +102,7 @@ export default function ApplicationsPage() {
         {["ALL", "APPLIED", "PHONE_SCREEN", "INTERVIEW", "OFFER", "REJECTED", "FOLLOW_UP", "WITHDRAWN"].map((status) => (
           <button
             key={status}
-            onClick={() => setStatusFilter(status)}
+            onClick={() => {setStatusFilter(status); setPage(1); }}
             className={`rounded-full px-3 py-1 text-xs font-medium transition-colors cursor-pointer whitespace-nowrap ${
               statusFilter === status
                 ? "bg-white text-zinc-900"
@@ -248,6 +261,13 @@ export default function ApplicationsPage() {
               </tbody>
             </table>
           </div>
+          <Pagination
+            page={page}
+            totalPages={totalPages}
+            total={total}
+            limit={LIMIT}
+            onPageChange={handlePageChange}
+          />
         </div>
       )}
       <AlertDialog open={!!deletingId} onOpenChange={() => setDeletingId(null)}>

@@ -2,18 +2,33 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
 
-export async function GET() {
+export async function GET(req: NextRequest) {
   const session = await auth();
   if (!session?.user?.id) {
     return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
   }
 
-  const applications = await prisma.application.findMany({
-    where: { userId: session.user.id },
-    orderBy: { createdAt: "desc" },
-  });
+  const { searchParams } = new URL(req.url);
+  const page = Math.max(1, parseInt(searchParams.get("page") ?? "1"));
+  const limit = Math.max(1, parseInt(searchParams.get("limit") ?? "10"));
+  const skip = (page - 1) * limit;
 
-  return NextResponse.json(applications);
+  const [applications, total] = await Promise.all([
+    prisma.application.findMany({
+      where: { userId: session.user.id },
+      orderBy: { createdAt: "desc" },
+      skip,
+      take: limit,
+    }),
+    prisma.application.count({
+      where: { userId: session.user.id },
+    }),
+  ]);
+
+  return NextResponse.json({
+    applications,
+    pagination: { total, page, limit, totalPages: Math.ceil(total / limit) },
+  });
 }
 
 export async function POST(req: NextRequest) {
