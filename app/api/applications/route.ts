@@ -28,7 +28,7 @@ export async function GET(req: NextRequest) {
 
   const [applications, total] = await Promise.all([
     prisma.application.findMany({
-      where: { userId: session.user.id },
+      where,
       orderBy: { createdAt: "desc" },
       skip,
       take: limit,
