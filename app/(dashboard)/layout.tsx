@@ -3,11 +3,6 @@ import { redirect } from "next/navigation";
 import MobileNav from "../components/MobileNav";
 import NavLinks from "../components/NavLinks";
 
-const navItems = [
-  { href: "/dashboard", label: "Dashboard" },
-  { href: "/dashboard/applications", label: "Applications" },
-];
-
 export default async function DashboardLayout({
   children,
 }: {
