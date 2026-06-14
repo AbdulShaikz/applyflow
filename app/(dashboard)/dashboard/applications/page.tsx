@@ -36,7 +36,14 @@ export default function ApplicationsPage() {
 
   async function fetchApplications(pageNum = page) {
     setLoading(true);
-    const res = await fetch(`/api/applications?page=${pageNum}&limit=${LIMIT}`);
+    const params = new URLSearchParams({
+      page: String(pageNum),
+      limit: String(LIMIT),
+      search: search,
+      status: statusFilter,
+    });
+
+    const res = await fetch(`/api/applications?${params}`);
     const data = await res.json();
     setApplications(data.applications);
     setTotalPages(data.pagination.totalPages);
@@ -50,18 +57,18 @@ export default function ApplicationsPage() {
     fetchApplications();
   }
 
-  const filtered = applications.filter((app) => {
-    const matchesSearch =
-      app.company.toLowerCase().includes(search.toLowerCase()) ||
-      app.role.toLowerCase().includes(search.toLowerCase());
-    const matchesStatus =
-      statusFilter === "ALL" || app.status === statusFilter;
-    return matchesSearch && matchesStatus;
-  });
+  // const filtered = applications.filter((app) => {
+  //   const matchesSearch =
+  //     app.company.toLowerCase().includes(search.toLowerCase()) ||
+  //     app.role.toLowerCase().includes(search.toLowerCase());
+  //   const matchesStatus =
+  //     statusFilter === "ALL" || app.status === statusFilter;
+  //   return matchesSearch && matchesStatus;
+  // });
   
   useEffect(() => {
     fetchApplications(page);
-  }, [page]);
+  }, [page, search, statusFilter]);
 
   function handlePageChange(newPage: number){
     setPage(newPage);
@@ -83,7 +90,7 @@ export default function ApplicationsPage() {
             type="text"
             placeholder="Search by company or role..."
             value={search}
-            onChange={(e) => {setSearch(e.target.value); setPage(1);}}
+            onChange={(e) => { setSearch(e.target.value); setPage(1); }}
             className="w-full min-w-0 bg-zinc-900/50 border-zinc-800 text-white placeholder:text-zinc-500 focus-visible:ring-zinc-700"
           />
         </div>
@@ -102,7 +109,7 @@ export default function ApplicationsPage() {
         {["ALL", "APPLIED", "PHONE_SCREEN", "INTERVIEW", "OFFER", "REJECTED", "FOLLOW_UP", "WITHDRAWN"].map((status) => (
           <button
             key={status}
-            onClick={() => {setStatusFilter(status); setPage(1); }}
+            onClick={() => { setStatusFilter(status); setPage(1); }}
             className={`rounded-full px-3 py-1 text-xs font-medium transition-colors cursor-pointer whitespace-nowrap ${
               statusFilter === status
                 ? "bg-white text-zinc-900"
@@ -137,14 +144,14 @@ export default function ApplicationsPage() {
 
       {loading ? (
         <p className="text-sm text-zinc-400">Loading...</p>
-      ) : filtered.length === 0 ? (
+      ) : applications.length === 0 ? (
         <div className="rounded-xl border border-zinc-800 bg-zinc-900/50 p-12 text-center text-sm text-zinc-400">
           {search ? "No applications match your search." : "No applications yet. Add your first one."}
         </div>
       ) : (
         <div className="rounded-xl border border-zinc-800 bg-zinc-900/30 overflow-hidden shadow-xl">
           <div className="md:hidden space-y-3 p-3 ">
-            {filtered.map((app) => (
+            {applications.map((app) => (
               <div
                 key={app.id}
                 className="rounded-xl border border-zinc-800 bg-zinc-900/50 p-4 space-y-3"
@@ -207,7 +214,7 @@ export default function ApplicationsPage() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-zinc-800/60 bg-zinc-900/10">
-                {filtered.map((app) => (
+                {applications.map((app) => (
                   <Fragment key={app.id}>
                     <tr 
                       onClick={() => setExpandedId(expandedId === app.id ? null : app.id)}

@@ -11,7 +11,20 @@ export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
   const page = Math.max(1, parseInt(searchParams.get("page") ?? "1"));
   const limit = Math.max(1, parseInt(searchParams.get("limit") ?? "10"));
+  const search = searchParams.get("search") ?? "";
+  const status = searchParams.get("status") ?? "ALL";
   const skip = (page - 1) * limit;
+
+  const where = {
+    userId: session.user.id,
+    ...(search && {
+      OR: [
+        {company: {contains: search, mode: "insensitive" as const}},
+        {role: {contains: search, mode: "insensitive" as const}},
+      ],
+    }),
+    ...(status !== "ALL" && { status }),
+  };
 
   const [applications, total] = await Promise.all([
     prisma.application.findMany({
@@ -20,9 +33,7 @@ export async function GET(req: NextRequest) {
       skip,
       take: limit,
     }),
-    prisma.application.count({
-      where: { userId: session.user.id },
-    }),
+    prisma.application.count({ where }),
   ]);
 
   return NextResponse.json({
