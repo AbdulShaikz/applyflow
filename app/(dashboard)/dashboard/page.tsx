@@ -1,6 +1,7 @@
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
+import StatusBadge from "@/app/components/StatusBadge";
 
 export default async function DashboardPage() {
   const session = await auth();
@@ -27,7 +28,7 @@ export default async function DashboardPage() {
         </p>
       </div>
 
-      <div className="grid gap-4 md:grid-cols-5">
+      <div className="grid gap-4 grid-cols-2 md:grid-cols-5">
         <div className="rounded-2xl border border-zinc-800 bg-zinc-900 p-6">
           <p className="text-sm text-zinc-400">Total Applied</p>
           <p className="mt-2 text-3xl font-semibold">{total}</p>
@@ -60,43 +61,75 @@ export default async function DashboardPage() {
           No applications yet. Head to Applications to add your first one.
         </div>
       ) : (
-        <div className="rounded-xl border border-zinc-800 bg-zinc-900/30 overflow-hidden">
-          <table className="min-w-full divide-y divide-zinc-800/80">
-            <thead className="bg-zinc-900/60">
-              <tr>
-                {["Company", "Role", "Status", "Applied On"].map((h) => (
-                  <th
-                    key={h}
-                    className="px-5 py-3.5 text-left text-xs font-semibold uppercase tracking-wider text-zinc-400 whitespace-nowrap"
-                  >
-                    {h}
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-zinc-800/60 bg-zinc-900/10">
-              {recent.map((app) => (
-                <tr key={app.id} className="hover:bg-zinc-800/30 transition-colors">
-                  <td className="px-5 py-3.5 text-sm font-medium text-white whitespace-nowrap">
-                    {app.company}
-                  </td>
-                  <td className="px-5 py-3.5 text-sm text-zinc-300 whitespace-nowrap">
-                    {app.role}
-                  </td>
-                  <td className="px-5 py-3.5 text-sm text-zinc-300 whitespace-nowrap">
-                    {app.status.replace(/_/g, " ")}
-                  </td>
-                  <td className="px-5 py-3.5 text-sm text-zinc-300 whitespace-nowrap">
+        <div className="rounded-xl border border-zinc-800 bg-zinc-900/30 overflow-hidden shadow-xl">
+          
+          <div className="md:hidden space-y-3 p-3">
+            {recent.map((app) => (
+              <div
+                key={app.id}
+                className="rounded-xl border border-zinc-800 bg-zinc-900/50 p-4 space-y-3"
+              >
+                <div>
+                  <p className="text-sm font-semibold text-white">{app.company}</p>
+                  <p className="text-sm text-zinc-400 mt-0.5">{app.role}</p>
+                </div>
+                <StatusBadge status={app.status} />
+                <div className="flex items-center justify-between text-xs text-zinc-500">
+                  <span>{app.location}</span>
+                  <span>
                     {new Date(app.appliedOn).toLocaleDateString(undefined, {
                       year: "numeric",
                       month: "short",
                       day: "numeric",
                     })}
-                  </td>
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="hidden md:block overflow-x-auto">
+            <table className="min-w-full divide-y divide-zinc-800/80">
+              <thead className="bg-zinc-900/60">
+                <tr>
+                  {["Company", "Role", "Status", "Location", "Applied On"].map((h) => (
+                    <th
+                      key={h}
+                      className="px-5 py-3.5 text-left text-xs font-semibold uppercase tracking-wider text-zinc-400 whitespace-nowrap"
+                    >
+                      {h}
+                    </th>
+                  ))}
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody className="divide-y divide-zinc-800/60 bg-zinc-900/10">
+                {recent.map((app) => (
+                  <tr key={app.id} className="hover:bg-zinc-800/30 transition-colors">
+                    <td className="px-5 py-3.5 text-sm font-medium text-white whitespace-nowrap">
+                      {app.company}
+                    </td>
+                    <td className="px-5 py-3.5 text-sm text-zinc-300 whitespace-nowrap">
+                      {app.role}
+                    </td>
+                    <td className="px-5 py-3.5 text-sm text-zinc-300 whitespace-nowrap">
+                      <StatusBadge status={app.status} />
+                    </td>
+                    <td className="px-5 py-3.5 text-sm text-zinc-300 whitespace-nowrap">
+                      {app.location}
+                    </td>
+                    <td className="px-5 py-3.5 text-sm text-zinc-300 whitespace-nowrap">
+                      {new Date(app.appliedOn).toLocaleDateString(undefined, {
+                        year: "numeric",
+                        month: "short",
+                        day: "numeric",
+                      })}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          
         </div>
       )}
     </div>
