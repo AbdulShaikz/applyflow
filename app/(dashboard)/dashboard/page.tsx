@@ -1,7 +1,10 @@
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { Plus } from "lucide-react";
+import Link from "next/link";
 import { redirect } from "next/navigation";
 import StatusBadge from "@/app/components/StatusBadge";
+import { Button } from "@/components/ui/button";
 
 export default async function DashboardPage() {
   const session = await auth();
@@ -21,11 +24,24 @@ export default async function DashboardPage() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h2 className="text-2xl font-semibold tracking-tight">Overview</h2>
-        <p className="mt-1 text-sm text-zinc-400">
-          A quick summary of your job search activity.
-        </p>
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <h2 className="text-2xl font-semibold tracking-tight">Overview</h2>
+          <p className="mt-1 text-sm text-zinc-400">
+            A quick summary of your job search activity.
+          </p>
+        </div>
+
+        <Button
+          asChild
+          variant="outline"
+          className="w-full sm:w-auto shrink-0 whitespace-nowrap"
+        >
+          <Link href="/dashboard/applications">
+            <Plus className="mr-2 h-4 w-4" />
+            Add Application
+          </Link>
+        </Button>
       </div>
 
       <div className="grid gap-4 grid-cols-2 md:grid-cols-5">
