@@ -46,23 +46,23 @@ export default async function DashboardPage() {
 
       <div className="grid gap-4 grid-cols-2 sm:grid-cols-3 lg:grid-cols-5">
         <div className="group relative rounded-2xl border border-zinc-800/80 bg-gradient-to-b from-zinc-900 to-zinc-900/40 p-5 transition-all duration-300 hover:border-zinc-700 shadow-md">
-          <p className="text-sm text-zinc-400">Total Applied</p>
+          <p className="text-xs font-medium tracking-wider text-zinc-400 uppercase">Total Applied</p>
           <p className="mt-2 text-3xl font-semibold">{total}</p>
         </div>
         <div className="group relative rounded-2xl border border-zinc-800/80 bg-gradient-to-b from-zinc-900 to-zinc-900/40 p-5 transition-all duration-300 hover:border-zinc-700 shadow-md">
-          <p className="text-sm text-zinc-400">Interviews</p>
+          <p className="text-xs font-medium tracking-wider text-zinc-400 uppercase">Interviews</p>
           <p className="mt-2 text-3xl font-semibold">{interviews}</p>
         </div>
         <div className="group relative rounded-2xl border border-zinc-800/80 bg-gradient-to-b from-zinc-900 to-zinc-900/40 p-5 transition-all duration-300 hover:border-zinc-700 shadow-md">
-          <p className="text-sm text-zinc-400">Offers</p>
+          <p className="text-xs font-medium tracking-wider text-zinc-400 uppercase">Offers</p>
           <p className="mt-2 text-3xl font-semibold">{offers}</p>
         </div>
         <div className="group relative rounded-2xl border border-zinc-800/80 bg-gradient-to-b from-zinc-900 to-zinc-900/40 p-5 transition-all duration-300 hover:border-zinc-700 shadow-md">
-          <p className="text-sm text-zinc-400">Rejected</p>
+          <p className="text-xs font-medium tracking-wider text-zinc-400 uppercase">Rejected</p>
           <p className="mt-2 text-3xl font-semibold">{rejected}</p>
         </div>
         <div className="group relative rounded-2xl border border-zinc-800/80 bg-gradient-to-b from-zinc-900 to-zinc-900/40 p-5 transition-all duration-300 hover:border-zinc-700 shadow-md">
-          <p className="text-sm text-zinc-400">Response Rate</p>
+          <p className="text-xs font-medium tracking-wider text-zinc-400 uppercase">Response Rate</p>
           <p className="mt-2 text-3xl font-semibold">{responseRate}%</p>
         </div>
       </div>
