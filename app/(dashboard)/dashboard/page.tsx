@@ -121,10 +121,10 @@ export default async function DashboardPage() {
               <tbody className="divide-y divide-zinc-800/60 bg-zinc-900/10">
                 {recent.map((app) => (
                   <tr key={app.id} className="hover:bg-zinc-800/30 transition-colors">
-                    <td className="px-5 py-3.5 text-sm font-medium text-white whitespace-nowrap">
+                    <td className="px-6 py-4 text-sm font-medium text-white whitespace-nowrap truncate max-w-45">
                       {app.company}
                     </td>
-                    <td className="px-5 py-3.5 text-sm text-zinc-300 whitespace-nowrap">
+                    <td className="px-6 py-4 text-sm font-medium text-white whitespace-nowrap truncate max-w-45">
                       {app.role}
                     </td>
                     <td className="px-5 py-3.5 text-sm text-zinc-300 whitespace-nowrap">
