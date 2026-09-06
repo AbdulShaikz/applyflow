@@ -7,27 +7,27 @@ export default function Home() {
         <div aria-hidden="true" className="pointer-events-none absolute left-1/2 top-0 z-0 h-128 w-3xl -translate-x-1/2 rounded-full bg-indigo-500/10 blur-3xl" />
 
         <header className="relative z-10 flex items-center justify-between border-b border-white/10 pb-5">
-          <Link href="/" aria-label="ApplyFlow home" className="group">
-            <h1 className="text-xl font-semibold tracking-tight sm:text-2xl">ApplyFlow<span className="text-indigo-400">.</span></h1>
+          <Link href="/" aria-label="ApplyFlow home" className="group min-w-0 shrink">
+            <h1 className="whitespace-nowrap text-lg font-semibold tracking-tight sm:text-2xl">ApplyFlow<span className="text-indigo-400">.</span></h1>
             <p className="text-xs text-zinc-500 transition-colors group-hover:text-zinc-400 sm:text-sm">Job search, organized.</p>
           </Link>
-          <div className="flex items-center gap-2 sm:gap-3">
+          <div className="flex shrink-0 items-center gap-1 sm:gap-3">
             <Link
               href="/login"
-              className="rounded-lg px-3 py-2 text-sm text-zinc-300 transition-colors hover:bg-white/5 hover:text-white sm:px-4"
+              className="whitespace-nowrap rounded-lg px-2.5 py-2 text-xs text-zinc-300 transition-colors hover:bg-white/5 hover:text-white sm:px-4 sm:text-sm"
             >
               Sign in
             </Link>
             <Link
               href="/register"
-              className="rounded-lg bg-white px-3.5 py-2 text-sm font-medium text-zinc-950 shadow-lg shadow-white/5 transition-all hover:bg-zinc-200 hover:shadow-white/10 sm:px-4"
+              className="whitespace-nowrap rounded-lg bg-white px-2.5 py-2 text-xs font-medium text-zinc-950 shadow-lg shadow-white/5 transition-all hover:bg-zinc-200 hover:shadow-white/10 sm:px-4 sm:text-sm"
             >
               Get started
             </Link>
           </div>
         </header>
 
-        <div className="relative z-10 grid flex-1 items-center gap-14 py-14 sm:py-20 lg:grid-cols-[1.05fr_0.95fr] lg:gap-20">
+        <div className="relative z-10 grid flex-1 items-center gap-14 py-8 sm:py-12 lg:grid-cols-[1.05fr_0.95fr] lg:gap-20">
           <div className="max-w-2xl">
             <p className="mb-6 inline-flex items-center gap-2 rounded-full border border-indigo-400/20 bg-indigo-400/10 px-3 py-1.5 text-xs font-medium text-indigo-300">
               <span className="h-1.5 w-1.5 rounded-full bg-indigo-400" />
