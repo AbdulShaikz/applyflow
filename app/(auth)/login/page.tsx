@@ -38,16 +38,16 @@ export default function LoginPage() {
   }
 
   return (
-    <main className="relative flex min-h-screen items-center justify-center overflow-hidden bg-black px-4 py-12 text-white">
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(63,63,70,0.22),transparent_42%)]" />
-      <div className="relative w-full max-w-md rounded-2xl border border-zinc-800/80 bg-zinc-950/80 p-6 shadow-2xl shadow-black/40 backdrop-blur sm:p-8">
+    <main className="relative flex min-h-screen items-center justify-center overflow-hidden bg-zinc-950 px-4 py-12 text-zinc-100">
+      <div aria-hidden="true" className="pointer-events-none absolute left-1/2 top-0 h-128 w-3xl -translate-x-1/2 rounded-full bg-indigo-500/10 blur-3xl" />
+      <div className="relative w-full max-w-md rounded-3xl border border-white/10 bg-white/3.5 p-6 shadow-2xl shadow-indigo-950/30 backdrop-blur-sm sm:p-8">
         <div className="mb-8">
-          <div className="mb-5 flex h-10 w-10 items-center justify-center rounded-xl bg-white text-sm font-bold text-black shadow-lg shadow-white/10">
+          <div className="mb-5 flex h-10 w-10 items-center justify-center rounded-xl bg-white text-sm font-bold text-zinc-950 shadow-lg shadow-white/10">
             A
           </div>
-          <h1 className="text-2xl font-semibold tracking-tight text-white">Welcome back</h1>
+          <h1 className="text-2xl font-semibold tracking-tight">Welcome back</h1>
           <p className="mt-2 text-sm leading-6 text-zinc-400">
-          Sign in to your ApplyFlow account
+            Sign in to your ApplyFlow account
           </p>
         </div>
 
@@ -61,7 +61,7 @@ export default function LoginPage() {
               autoComplete="email"
               required
               placeholder="you@example.com"
-              className="w-full rounded-xl border border-zinc-800 bg-zinc-900/70 px-3.5 py-3 text-sm text-white outline-none transition placeholder:text-zinc-600 hover:border-zinc-700 focus:border-zinc-500 focus:ring-4 focus:ring-zinc-800/60 disabled:cursor-not-allowed disabled:opacity-50"
+              className="w-full rounded-xl border border-white/10 bg-zinc-900/90 px-3.5 py-3 text-sm text-white outline-none transition placeholder:text-zinc-600 hover:border-white/20 focus:border-indigo-400/50 focus:ring-4 focus:ring-indigo-400/10 disabled:cursor-not-allowed disabled:opacity-50"
             />
           </div>
           <div>
@@ -75,7 +75,7 @@ export default function LoginPage() {
               autoComplete="current-password"
               required
               placeholder="••••••••"
-              className="w-full rounded-xl border border-zinc-800 bg-zinc-900/70 px-3.5 py-3 text-sm text-white outline-none transition placeholder:text-zinc-600 hover:border-zinc-700 focus:border-zinc-500 focus:ring-4 focus:ring-zinc-800/60 disabled:cursor-not-allowed disabled:opacity-50"
+              className="w-full rounded-xl border border-white/10 bg-zinc-900/90 px-3.5 py-3 text-sm text-white outline-none transition placeholder:text-zinc-600 hover:border-white/20 focus:border-indigo-400/50 focus:ring-4 focus:ring-indigo-400/10 disabled:cursor-not-allowed disabled:opacity-50"
             />
           </div>
 
@@ -84,16 +84,16 @@ export default function LoginPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full rounded-xl bg-white py-3 text-sm font-semibold text-zinc-950 transition hover:bg-zinc-200 focus:outline-none focus:ring-4 focus:ring-zinc-700/60 active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-50"
+            className="w-full rounded-xl bg-white py-3 text-sm font-semibold text-zinc-950 transition hover:bg-zinc-200 focus:outline-none focus:ring-4 focus:ring-indigo-400/20 active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-50"
           >
             {loading ? "Signing in..." : "Sign in"}
           </button>
         </form>
         <div className="mt-6">
           <div className="relative flex items-center">
-            <div className="flex-1 border-t border-zinc-800" />
+            <div className="flex-1 border-t border-white/10" />
             <span className="mx-3 text-xs text-zinc-500">or</span>
-            <div className="flex-1 border-t border-zinc-800" />
+            <div className="flex-1 border-t border-white/10" />
           </div>
 
           <button
@@ -110,7 +110,7 @@ export default function LoginPage() {
                 setGoogleLoading(false);
               }
             }}
-            className="mt-4 w-full flex items-center justify-center gap-2 rounded-lg border border-zinc-800 bg-transparent px-4 py-2.5 text-sm font-medium text-zinc-300 hover:bg-zinc-900/50 hover:text-white transition-all active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-50 cursor-pointer"
+            className="mt-4 flex w-full cursor-pointer items-center justify-center gap-2 rounded-lg border border-white/10 bg-white/3 px-4 py-2.5 text-sm font-medium text-zinc-300 transition-all hover:bg-white/[0.07] hover:text-white active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-50"
           >
             {googleLoading ? (
               <>
