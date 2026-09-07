@@ -18,63 +18,78 @@ export default function LoginPage() {
 
     const formData = new FormData(e.currentTarget);
 
-    const result = await signIn("credentials", {
-      email: formData.get("email"),
-      password: formData.get("password"),
-      redirect: false,
-    });
+    try {
+      const result = await signIn("credentials", {
+        email: formData.get("email"),
+        password: formData.get("password"),
+        redirect: false,
+      });
 
-    if (result?.error) {
-      setError("Invalid email or password");
+      if (result?.error) {
+        setError("Invalid email or password");
+        setLoading(false);
+      } else {
+        router.push("/dashboard");
+      }
+    } catch {
+      setError("Unable to sign in right now. Please try again.");
       setLoading(false);
-    } else {
-      router.push("/dashboard");
     }
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center px-4">
-      <div className="w-full max-w-sm">
-        <h1 className="text-2xl font-semibold text-white">Welcome back</h1>
-        <p className="mt-1 text-sm text-zinc-400">
+    <main className="relative flex min-h-screen items-center justify-center overflow-hidden bg-black px-4 py-12 text-white">
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(63,63,70,0.22),transparent_42%)]" />
+      <div className="relative w-full max-w-md rounded-2xl border border-zinc-800/80 bg-zinc-950/80 p-6 shadow-2xl shadow-black/40 backdrop-blur sm:p-8">
+        <div className="mb-8">
+          <div className="mb-5 flex h-10 w-10 items-center justify-center rounded-xl bg-white text-sm font-bold text-black shadow-lg shadow-white/10">
+            A
+          </div>
+          <h1 className="text-2xl font-semibold tracking-tight text-white">Welcome back</h1>
+          <p className="mt-2 text-sm leading-6 text-zinc-400">
           Sign in to your ApplyFlow account
-        </p>
+          </p>
+        </div>
 
-        <form onSubmit={handleSubmit} className="mt-8 space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-5" aria-label="Sign in form">
           <div>
-            <label className="mb-1.5 block text-sm text-zinc-300">Email</label>
+            <label htmlFor="email" className="mb-2 block text-sm font-medium text-zinc-300">Email</label>
             <input
+              id="email"
               name="email"
               type="email"
+              autoComplete="email"
               required
               placeholder="you@example.com"
-              className="w-full rounded-lg border border-zinc-800 bg-zinc-900 px-3 py-2 text-sm text-white placeholder:text-zinc-600 transition-all focus:border-zinc-500 focus:outline-none focus:ring-2 focus:ring-zinc-800 focus:ring-offset-2 focus:ring-offset-black disabled:cursor-not-allowed disabled:opacity-50"
+              className="w-full rounded-xl border border-zinc-800 bg-zinc-900/70 px-3.5 py-3 text-sm text-white outline-none transition placeholder:text-zinc-600 hover:border-zinc-700 focus:border-zinc-500 focus:ring-4 focus:ring-zinc-800/60 disabled:cursor-not-allowed disabled:opacity-50"
             />
           </div>
           <div>
-            <label className="mb-1.5 block text-sm text-zinc-300">
+            <label htmlFor="password" className="mb-2 block text-sm font-medium text-zinc-300">
               Password
             </label>
             <input
+              id="password"
               name="password"
               type="password"
+              autoComplete="current-password"
               required
               placeholder="••••••••"
-              className="w-full rounded-lg border border-zinc-800 bg-zinc-900 px-3 py-2 text-sm text-white placeholder:text-zinc-600 transition-all focus:border-zinc-500 focus:outline-none focus:ring-2 focus:ring-zinc-800 focus:ring-offset-2 focus:ring-offset-black disabled:cursor-not-allowed disabled:opacity-50"
+              className="w-full rounded-xl border border-zinc-800 bg-zinc-900/70 px-3.5 py-3 text-sm text-white outline-none transition placeholder:text-zinc-600 hover:border-zinc-700 focus:border-zinc-500 focus:ring-4 focus:ring-zinc-800/60 disabled:cursor-not-allowed disabled:opacity-50"
             />
           </div>
 
-          {error && <p className="text-sm text-red-400">{error}</p>}
+          {error && <p role="alert" className="rounded-lg border border-red-900/50 bg-red-950/30 px-3 py-2 text-sm text-red-300">{error}</p>}
 
           <button
             type="submit"
             disabled={loading}
-            className="w-full rounded-lg bg-white py-2 text-sm font-medium text-zinc-900 transition hover:bg-zinc-200 disabled:opacity-50"
+            className="w-full rounded-xl bg-white py-3 text-sm font-semibold text-zinc-950 transition hover:bg-zinc-200 focus:outline-none focus:ring-4 focus:ring-zinc-700/60 active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-50"
           >
             {loading ? "Signing in..." : "Sign in"}
           </button>
         </form>
-        <div className="mt-4">
+        <div className="mt-6">
           <div className="relative flex items-center">
             <div className="flex-1 border-t border-zinc-800" />
             <span className="mx-3 text-xs text-zinc-500">or</span>
@@ -156,6 +171,6 @@ export default function LoginPage() {
           </Link>
         </p>
       </div>
-    </div>
+    </main>
   );
 }
