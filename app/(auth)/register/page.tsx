@@ -55,18 +55,18 @@ export default function RegisterPage() {
   }
 
   return (
-    <main className="relative flex min-h-screen items-center justify-center overflow-hidden bg-zinc-950 px-4 py-12 text-zinc-100">
+    <main className="relative flex min-h-screen items-center justify-center overflow-hidden bg-zinc-950 px-4 py-6 text-zinc-100">
       <div aria-hidden="true" className="pointer-events-none absolute left-1/2 top-0 h-128 w-3xl -translate-x-1/2 rounded-full bg-indigo-500/10 blur-3xl" />
-      <div className="relative w-full max-w-md rounded-3xl border border-white/10 bg-white/3.5 p-6 shadow-2xl shadow-indigo-950/30 backdrop-blur-sm sm:p-8">
-        <div className="mb-8">
-          <div className="mb-5 flex h-10 w-10 items-center justify-center rounded-xl bg-white text-sm font-bold text-zinc-950 shadow-lg shadow-white/10">A</div>
+      <div className="relative w-full max-w-md rounded-3xl border border-white/10 bg-white/3.5 p-5 shadow-2xl shadow-indigo-950/30 backdrop-blur-sm sm:p-6">
+        <div className="mb-5">
+          <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-xl bg-white text-sm font-bold text-zinc-950 shadow-lg shadow-white/10">A</div>
           <h1 className="text-2xl font-semibold tracking-tight">Create your account</h1>
           <p className="mt-2 text-sm leading-6 text-zinc-400">Start tracking your job search with ApplyFlow</p>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-5" aria-label="Create account form">
+        <form onSubmit={handleSubmit} className="space-y-3.5" aria-label="Create account form">
           <div>
-            <label htmlFor="name" className="mb-2 block text-sm font-medium text-zinc-300">Name</label>
+            <label htmlFor="name" className="mb-1.5 block text-sm font-medium text-zinc-300">Name</label>
             <input
               id="name"
               name="name"
@@ -74,11 +74,11 @@ export default function RegisterPage() {
               autoComplete="name"
               required
               placeholder="Your name"
-              className="w-full rounded-xl border border-white/10 bg-zinc-900/90 px-3.5 py-3 text-sm text-white outline-none transition placeholder:text-zinc-600 hover:border-white/20 focus:border-indigo-400/50 focus:ring-4 focus:ring-indigo-400/10"
+              className="w-full rounded-xl border border-white/10 bg-zinc-900/90 px-3.5 py-2.5 text-sm text-white outline-none transition placeholder:text-zinc-600 hover:border-white/20 focus:border-indigo-400/50 focus:ring-4 focus:ring-indigo-400/10"
             />
           </div>
           <div>
-            <label htmlFor="email" className="mb-2 block text-sm font-medium text-zinc-300">Email</label>
+            <label htmlFor="email" className="mb-1.5 block text-sm font-medium text-zinc-300">Email</label>
             <input
               id="email"
               name="email"
@@ -86,11 +86,11 @@ export default function RegisterPage() {
               autoComplete="email"
               required
               placeholder="you@example.com"
-              className="w-full rounded-xl border border-white/10 bg-zinc-900/90 px-3.5 py-3 text-sm text-white outline-none transition placeholder:text-zinc-600 hover:border-white/20 focus:border-indigo-400/50 focus:ring-4 focus:ring-indigo-400/10"
+              className="w-full rounded-xl border border-white/10 bg-zinc-900/90 px-3.5 py-2.5 text-sm text-white outline-none transition placeholder:text-zinc-600 hover:border-white/20 focus:border-indigo-400/50 focus:ring-4 focus:ring-indigo-400/10"
             />
           </div>
           <div>
-            <label htmlFor="password" className="mb-2 block text-sm font-medium text-zinc-300">Password</label>
+            <label htmlFor="password" className="mb-1.5 block text-sm font-medium text-zinc-300">Password</label>
             <input
               id="password"
               name="password"
@@ -98,7 +98,7 @@ export default function RegisterPage() {
               autoComplete="new-password"
               required
               placeholder="At least 6 characters"
-              className="w-full rounded-xl border border-white/10 bg-zinc-900/90 px-3.5 py-3 text-sm text-white outline-none transition placeholder:text-zinc-600 hover:border-white/20 focus:border-indigo-400/50 focus:ring-4 focus:ring-indigo-400/10"
+              className="w-full rounded-xl border border-white/10 bg-zinc-900/90 px-3.5 py-2.5 text-sm text-white outline-none transition placeholder:text-zinc-600 hover:border-white/20 focus:border-indigo-400/50 focus:ring-4 focus:ring-indigo-400/10"
             />
           </div>
 
@@ -112,7 +112,7 @@ export default function RegisterPage() {
             {loading ? "Creating account..." : "Create account"}
           </button>
         </form>
-        <div className="mt-6">
+        <div className="mt-4">
           <div className="relative flex items-center">
             <div className="flex-1 border-t border-white/10" />
             <span className="mx-3 text-xs text-zinc-500">or</span>
@@ -126,12 +126,12 @@ export default function RegisterPage() {
               setGoogleLoading(true);
               await signIn("google", { callbackUrl: "/dashboard" });
             }}
-            className="mt-4 w-full cursor-pointer rounded-lg border border-white/10 bg-white/3 px-4 py-2.5 text-sm font-medium text-zinc-300 transition-all hover:bg-white/[0.07] hover:text-white active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-50"
+            className="mt-3 w-full cursor-pointer rounded-lg border border-white/10 bg-white/3 px-4 py-2.5 text-sm font-medium text-zinc-300 transition-all hover:bg-white/[0.07] hover:text-white active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-50"
           >
             {googleLoading ? "Redirecting..." : "Continue with Google"}
           </button>
         </div>
-        <p className="mt-6 text-center text-sm text-zinc-400">
+        <p className="mt-4 text-center text-sm text-zinc-400">
           Already have an account?{" "}
           <Link href="/login" className="text-white hover:underline">
             Sign in
