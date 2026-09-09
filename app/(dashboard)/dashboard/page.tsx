@@ -24,9 +24,9 @@ export default async function DashboardPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <h2 className="text-2xl font-semibold tracking-tight">Overview</h2>
+          <h2 className="text-2xl font-semibold tracking-tight text-zinc-100">Overview</h2>
           <p className="mt-1 text-sm text-zinc-400">
             A quick summary of your job search activity.
           </p>
@@ -35,7 +35,7 @@ export default async function DashboardPage() {
         <Button
           asChild
           variant="outline"
-          className="w-full sm:w-auto shrink-0 whitespace-nowrap"
+          className="w-full shrink-0 whitespace-nowrap border-white/10 bg-white/3 sm:w-auto"
         >
           <Link href="/dashboard/applications">
             <Plus className="mr-2 h-4 w-4" />
@@ -44,26 +44,26 @@ export default async function DashboardPage() {
         </Button>
       </div>
 
-      <div className="grid gap-4 grid-cols-2 sm:grid-cols-3 lg:grid-cols-5">
-        <div className="group relative rounded-2xl border border-zinc-800/80 bg-linear-to-b from-zinc-900 to-zinc-900/40 p-5 transition-all duration-300 hover:border-zinc-700 shadow-md">
+      <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5 lg:gap-4">
+        <div className="group relative overflow-hidden rounded-2xl border border-white/10 bg-linear-to-b from-zinc-900 to-zinc-900/40 p-4 shadow-md transition-all duration-300 hover:-translate-y-0.5 hover:border-indigo-400/30 sm:p-5">
           <p className="text-xs font-medium tracking-wider text-zinc-400 uppercase">Total Applied</p>
-          <p className="mt-2 text-3xl font-semibold">{total}</p>
+          <p className="mt-2 text-2xl font-semibold sm:text-3xl">{total}</p>
         </div>
-        <div className="group relative rounded-2xl border border-zinc-800/80 bg-linear-to-b from-zinc-900 to-zinc-900/40 p-5 transition-all duration-300 hover:border-zinc-700 shadow-md">
+        <div className="group relative overflow-hidden rounded-2xl border border-white/10 bg-linear-to-b from-zinc-900 to-zinc-900/40 p-4 shadow-md transition-all duration-300 hover:-translate-y-0.5 hover:border-indigo-400/30 sm:p-5">
           <p className="text-xs font-medium tracking-wider text-zinc-400 uppercase">Interviews</p>
-          <p className="mt-2 text-3xl font-semibold">{interviews}</p>
+          <p className="mt-2 text-2xl font-semibold sm:text-3xl">{interviews}</p>
         </div>
-        <div className="group relative rounded-2xl border border-zinc-800/80 bg-linear-to-b from-zinc-900 to-zinc-900/40 p-5 transition-all duration-300 hover:border-zinc-700 shadow-md">
+        <div className="group relative overflow-hidden rounded-2xl border border-white/10 bg-linear-to-b from-zinc-900 to-zinc-900/40 p-4 shadow-md transition-all duration-300 hover:-translate-y-0.5 hover:border-indigo-400/30 sm:p-5">
           <p className="text-xs font-medium tracking-wider text-zinc-400 uppercase">Offers</p>
-          <p className="mt-2 text-3xl font-semibold">{offers}</p>
+          <p className="mt-2 text-2xl font-semibold sm:text-3xl">{offers}</p>
         </div>
-        <div className="group relative rounded-2xl border border-zinc-800/80 bg-linear-to-b from-zinc-900 to-zinc-900/40 p-5 transition-all duration-300 hover:border-zinc-700 shadow-md">
+        <div className="group relative overflow-hidden rounded-2xl border border-white/10 bg-linear-to-b from-zinc-900 to-zinc-900/40 p-4 shadow-md transition-all duration-300 hover:-translate-y-0.5 hover:border-indigo-400/30 sm:p-5">
           <p className="text-xs font-medium tracking-wider text-zinc-400 uppercase">Rejected</p>
-          <p className="mt-2 text-3xl font-semibold">{rejected}</p>
+          <p className="mt-2 text-2xl font-semibold sm:text-3xl">{rejected}</p>
         </div>
-        <div className="group relative rounded-2xl border border-zinc-800/80 bg-linear-to-b from-zinc-900 to-zinc-900/40 p-5 transition-all duration-300 hover:border-zinc-700 shadow-md">
+        <div className="group relative col-span-2 overflow-hidden rounded-2xl border border-white/10 bg-linear-to-b from-zinc-900 to-zinc-900/40 p-4 shadow-md transition-all duration-300 hover:-translate-y-0.5 hover:border-indigo-400/30 sm:col-span-1 sm:p-5">
           <p className="text-xs font-medium tracking-wider text-zinc-400 uppercase">Response Rate</p>
-          <p className="mt-2 text-3xl font-semibold">{responseRate}%</p>
+          <p className="mt-2 text-2xl font-semibold sm:text-3xl">{responseRate}%</p>
         </div>
       </div>
 
@@ -73,11 +73,11 @@ export default async function DashboardPage() {
       </div>
 
       {recent.length === 0 ? (
-        <div className="rounded-xl border border-zinc-800 bg-zinc-900/50 p-12 text-center text-sm text-zinc-400">
+        <div className="rounded-2xl border border-white/10 bg-white/3 p-12 text-center text-sm text-zinc-400">
           No applications yet. Head to Applications to add your first one.
         </div>
       ) : (
-        <div className="rounded-xl border border-zinc-800 bg-zinc-900/30 overflow-hidden shadow-xl">
+        <div className="overflow-hidden rounded-2xl border border-white/10 bg-white/2 shadow-xl">
           
           <div className="md:hidden space-y-3 p-3">
             {recent.map((app) => (
@@ -91,6 +91,7 @@ export default async function DashboardPage() {
                 </div>
                 <StatusBadge status={app.status} />
                 <div className="flex items-center justify-between text-xs text-zinc-500">
+            
                   <span>{app.location}</span>
                   <span>
                     {new Date(app.appliedOn).toLocaleDateString(undefined, {
