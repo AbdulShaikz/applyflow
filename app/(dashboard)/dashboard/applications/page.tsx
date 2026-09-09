@@ -76,22 +76,23 @@ export default function ApplicationsPage() {
   }
 
   return (
-    <div className="space-y-6 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="mx-auto max-w-7xl space-y-6">
       <div>
-        <h1 className="text-2xl font-bold tracking-tight text-white">Applications</h1>
+        <h1 className="text-2xl font-semibold tracking-tight text-zinc-100">Applications</h1>
         <p className="mt-1 text-sm text-zinc-400">
           Track every job application in one place.
         </p>
       </div>
 
-      <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div className="w-full min-w-0 md:max-w-xs">
           <Input
             type="text"
             placeholder="Search by company or role..."
             value={search}
             onChange={(e) => { setSearch(e.target.value); setPage(1); }}
-            className="w-full min-w-0 bg-zinc-900/50 border-zinc-800 text-white placeholder:text-zinc-500 focus-visible:ring-zinc-700"
+            aria-label="Search applications"
+            className="w-full min-w-0 border-white/10 bg-zinc-900/80 text-white placeholder:text-zinc-500 focus-visible:border-indigo-400/50 focus-visible:ring-indigo-400/10"
           />
         </div>
         <Button
@@ -99,13 +100,13 @@ export default function ApplicationsPage() {
             setEditingApplication(null);
             setOpen(true);
           }}
-          className="w-full md:w-auto cursor-pointer bg-white text-zinc-950 hover:bg-zinc-200 font-medium shrink-0 whitespace-nowrap"
+          className="w-full shrink-0 cursor-pointer bg-white font-medium text-zinc-950 shadow-lg shadow-white/5 transition-all hover:-translate-y-0.5 hover:bg-zinc-200 sm:w-auto"
         >
           + Add Application
         </Button>
       </div>
 
-      <div className="flex flex-wrap gap-2 pb-1">
+      <div className="flex flex-wrap gap-2 border-b border-white/10 pb-4">
         {["ALL", "APPLIED", "PHONE_SCREEN", "INTERVIEW", "OFFER", "REJECTED", "FOLLOW_UP", "WITHDRAWN"].map((status) => (
           <button
             key={status}
@@ -113,7 +114,7 @@ export default function ApplicationsPage() {
             className={`rounded-full px-3 py-1 text-xs font-medium transition-colors cursor-pointer whitespace-nowrap ${
               statusFilter === status
                 ? "bg-white text-zinc-900"
-                : "border border-zinc-700 text-zinc-400 hover:border-zinc-500 hover:text-zinc-200"
+                : "border border-white/10 text-zinc-400 hover:border-white/20 hover:bg-white/5 hover:text-zinc-200"
             }`}
           >
             {status === "ALL" ? "All" : status.replace(/_/g, " ")}
@@ -123,7 +124,7 @@ export default function ApplicationsPage() {
 
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent
-          className="bg-zinc-900 border-zinc-800 text-zinc-100 sm:max-w-lg max-h-[90vh] overflow-y-auto"
+          className="max-h-[90vh] overflow-y-auto border-white/10 bg-zinc-900 text-zinc-100 shadow-2xl shadow-black/40 sm:max-w-lg"
           onInteractOutside={(e) => e.preventDefault()}
         >
           <DialogHeader>
@@ -143,18 +144,20 @@ export default function ApplicationsPage() {
       </Dialog>
 
       {loading ? (
-        <p className="text-sm text-zinc-400">Loading...</p>
+        <div className="rounded-2xl border border-white/10 bg-white/3 p-12 text-center text-sm text-zinc-400">
+          Loading applications...
+        </div>
       ) : applications.length === 0 ? (
-        <div className="rounded-xl border border-zinc-800 bg-zinc-900/50 p-12 text-center text-sm text-zinc-400">
+        <div className="rounded-2xl border border-white/10 bg-white/3 p-12 text-center text-sm text-zinc-400">
           {search ? "No applications match your search." : "No applications yet. Add your first one."}
         </div>
       ) : (
-        <div className="rounded-xl border border-zinc-800 bg-zinc-900/30 overflow-hidden shadow-xl">
-          <div className="md:hidden space-y-3 p-3 ">
+        <div className="overflow-hidden rounded-2xl border border-white/10 bg-white/2 shadow-xl">
+          <div className="space-y-3 p-3 md:hidden">
             {applications.map((app) => (
               <div
                 key={app.id}
-                className="rounded-xl border border-zinc-800 bg-zinc-900/50 p-4 space-y-3"
+                className="space-y-3 rounded-xl border border-white/10 bg-zinc-900/70 p-4 transition-colors hover:border-white/20"
               >
                 <div className="flex items-start justify-between">
                   <div>
@@ -200,25 +203,25 @@ export default function ApplicationsPage() {
             ))}
           </div>
           <div className="hidden md:block overflow-x-auto">
-            <table className="min-w-full divide-y divide-zinc-800/80 backend-table">
-              <thead className="bg-zinc-900/60">
+            <table className="backend-table min-w-full divide-y divide-white/10">
+              <thead className="bg-zinc-900/70">
                 <tr>
                   {['Company', 'Role', 'Status', 'Location', 'Applied On'].map((h) => (
-                    <th key={h} className="px-5 py-3.5 text-left text-xs font-semibold uppercase tracking-wider text-zinc-400 whitespace-nowrap">
+                    <th key={h} scope="col" className="whitespace-nowrap px-5 py-3.5 text-left text-xs font-semibold uppercase tracking-wider text-zinc-400">
                       {h}
                     </th>
                   ))}
-                  <th className="px-5 py-3.5 text-right text-xs font-semibold uppercase tracking-wider text-zinc-400">
+                  <th scope="col" className="px-5 py-3.5 text-right text-xs font-semibold uppercase tracking-wider text-zinc-400">
                     Actions
                   </th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-zinc-800/60 bg-zinc-900/10">
+              <tbody className="divide-y divide-white/10 bg-zinc-900/10">
                 {applications.map((app) => (
                   <Fragment key={app.id}>
                     <tr 
                       onClick={() => setExpandedId(expandedId === app.id ? null : app.id)}
-                      className="hover:bg-zinc-800/30 transition-colors cursor-pointer"
+                      className="cursor-pointer transition-colors hover:bg-white/5"
                     >
                       <td className="px-5 py-3.5 text-sm font-medium text-white whitespace-nowrap">{app.company}</td>
                       <td className="px-5 py-3.5 text-sm text-zinc-300 whitespace-nowrap">{app.role}</td>
@@ -258,7 +261,7 @@ export default function ApplicationsPage() {
                     </tr>
                     {expandedId === app.id && (
                       <tr>
-                        <td colSpan={6} className="px-5 py-3 bg-zinc-900/60 text-sm text-zinc-400">
+                        <td colSpan={6} className="bg-zinc-900/60 px-5 py-3 text-sm text-zinc-400">
                           {app.notes ? app.notes : "No notes added."}
                         </td>
                       </tr>
@@ -278,7 +281,7 @@ export default function ApplicationsPage() {
         </div>
       )}
       <AlertDialog open={!!deletingId} onOpenChange={() => setDeletingId(null)}>
-        <AlertDialogContent className="bg-zinc-900 border-zinc-800 text-zinc-100">
+        <AlertDialogContent className="border-white/10 bg-zinc-900 text-zinc-100 shadow-2xl shadow-black/40">
           <AlertDialogHeader>
             <AlertDialogTitle>Delete application?</AlertDialogTitle>
             <AlertDialogDescription className="text-zinc-400">
